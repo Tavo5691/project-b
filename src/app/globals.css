@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #556b2f;
+  --color-card-bg: #f7f9f6;
+  --color-text-muted: #5a6657;
+  --color-border: #e1e7de;
+  --color-text: #333333;
+}
+
+body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-text);
+  background-color: #ffffff;
+}
+
+/* Category tabs — horizontal scroll, no visible scrollbar */
+.category-tabs {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+.category-tabs::-webkit-scrollbar {
+  display: none;
+}
