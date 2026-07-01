@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Regalos de Nuestro Bebé</title>
+    <style>
+        :root {
+            --primary-color: #556b2f; /* Verde Oliva */
+            --bg-color: #ffffff;
+            --card-bg: #f7f9f6;
+            --text-color: #333333;
+            --text-muted: #7b8a76;
+            --border-color: #e1e7de;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            line-height: 1.6;
+            padding-bottom: 60px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Encabezado */
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+
+        /* Secciones del Evento */
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            font-weight: 400;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary-color);
+            padding-left: 15px;
+        }
+
+        .event-info {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 4px;
+        }
+
+        .event-info p {
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: #ffffff;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #3d4e22;
+        }
+
+        /* Categorías y Regalos */
+        .categories {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .category-tab {
+            padding: 8px 16px;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .category-tab.active {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .gift-grid {
+            display: block;
+        }
+
+        .gift-card {
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: table;
+            width: 100%;
+        }
+
+        .gift-img {
+            width: 120px;
+            height: 120px;
+            background-color: #eee;
+            border-radius: 4px;
+            display: table-cell;
+            vertical-align: middle;
+            text-align: center;
+            color: #aaa;
+            font-size: 0.8rem;
+        }
+
+        .gift-details {
+            display: table-cell;
+            vertical-align: top;
+            padding-left: 20px;
+        }
+
+        .gift-title {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .gift-desc {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .gift-link {
+            font-size: 0.85rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        /* Regalo Reservado */
+        .gift-card.reserved {
+            background-color: #fafafa;
+            border-color: #e0e0e0;
+        }
+
+        .gift-card.reserved .gift-title,
+        .gift-card.reserved .gift-desc,
+        .gift-card.reserved .gift-link {
+            color: #999;
+        }
+
+        .badge-reserved {
+            background-color: #e0e0e0;
+            color: #666;
+            padding: 4px 8px;
+            font-size: 0.8rem;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        /* Ventana Emergente (Modal) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-box {
+            background-color: #ffffff;
+            padding: 30px;
+            max-width: 450px;
+            width: 90%;
+            border-radius: 4px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+            margin: 10% auto;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: var(--text-muted);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-family: inherit;
+        }
+
+        .thank-you-message {
+            display: none;
+            text-align: center;
+        }
+
+        .thank-you-message h3 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 1.4rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>¡Bienvenido a nuestra lista!</h1>
+        <p>Esperando con amor la llegada de nuestro bebé</p>
+    </header>
+
+    <div class="container">
+        
+        <!-- Información del Evento -->
+        <div class="section">
+            <h2 class="section-title">Información del Evento</h2>
+            <div class="event-info">
+                <p><strong>Fecha:</strong> Sábado, 15 de Octubre</p>
+                <p><strong>Hora:</strong> 4:00 PM</p>
+                <p><strong>Lugar:</strong> Calle de la Armonía #123, Ciudad de México</p>
+                <p style="margin-top: 15px; font-style: italic; color: #555;">
+                    *Nota: Si prefieres no elegir nada de la lista, nos ayudarías muchísimo con ropa (preferiblemente en tonos tierra, beige o verde oliva), pañales Talla M o apoyo en efectivo. ¡Gracias!
+                </p>
+                <br>
+                <a href="#" class="btn">Ver en Google Maps</a>
+            </div>
+        </div>
+
+        <!-- Lista de Regalos -->
+        <div class="section">
+            <h2 class="section-title">Lista de Regalos</h2>
+            
+            <div class="categories">
+                <div class="category-tab active">Higiene y Baño</div>
+                <div class="category-tab">Ropa y Textil</div>
+                <div class="category-tab">Alimentación</div>
+            </div>
+
+            <div class="gift-grid">
+                
+                <!-- Regalo Disponible -->
+                <div class="gift-card">
+                    <div class="gift-img">[Foto del Producto]</div>
+                    <div class="gift-details">
+                        <div class="gift-title">Bañera Ergonómica para Bebé</div>
+                        <div class="gift-desc">De preferencia en color blanco o gris claro. Esencial para sus primeros baños.</div>
+                        <a href="https://amazon.com" target="_blank" class="gift-link">Ver ejemplo en tienda externa ↗</a>
+                        <div>
+                            <button class="btn" onclick="openModal('Bañera Ergonómica')">Reservar Regalo</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Regalo Reservado -->
+                <div class="gift-card reserved">
+                    <div class="gift-img">[Foto del Producto]</div>
+                    <div class="gift-details">
+                        <div class="gift-title">Set de Toallas de Algodón Orgánico</div>
+                        <div class="gift-desc">Pack de 3 toallas suaves con capucha de osito.</div>
+                        <a href="#" class="gift-link">Ver ejemplo en tienda externa ↗</a>
+                        <div>
+                            <span class="badge-reserved">✓ Ya Reservado</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Apoyo Económico -->
+        <div class="section">
+            <h2 class="section-title">Apoyo Económico</h2>
+            <div class="event-info" style="border-left: 4px solid var(--primary-color);">
+                <p>Si deseas hacernos llegar un obsequio en efectivo para los fondos o pañales del bebé, puedes realizar una transferencia a la siguiente cuenta:</p>
+                <p style="margin-top: 10px;"><strong>Banco:</strong> Banco Familiar</p>
+                <p><strong>Cuenta CLABE:</strong> 0123 4567 8901 2345 67</p>
+                <p><strong>A nombre de:</strong> Mamá y Papá</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Ventana emergente de Reserva -->
+    <div class="modal-overlay" id="reserveModal" style="display: none;">
+        <div class="modal-box">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            
+            <!-- Formulario inicial -->
+            <div id="modalForm">
+                <h3 style="color: var(--primary-color); margin-bottom: 15px;">Reservar: <span id="giftName"></span></h3>
+                <div class="form-group">
+                    <label for="name">Nombre *</label>
+                    <input type="text" id="name" required placeholder="Tu nombre">
+                </div>
+                <div class="form-group">
+                    <label for="lastname">Apellido *</label>
+                    <input type="text" id="lastname" required placeholder="Tu apellido">
+                </div>
+                <div class="form-group">
+                    <label for="message">Mensaje de Felicitación (Opcional)</label>
+                    <textarea id="message" rows="3" placeholder="¡Déjanos unas palabras bonitas!"></textarea>
+                </div>
+                <button class="btn" style="width: 100%;" onclick="submitReservation()">Confirmar Reserva</button>
+            </div>
+
+            <!-- Carta de agradecimiento inmediata -->
+            <div id="modalThanks" class="thank-you-message">
+                <h3>¡Muchas gracias!</h3>
+                <p id="thanksText">Tu regalo nos hace muy felices y será de gran ayuda para la llegada de nuestro bebé.</p>
+                <br>
+                <button class="btn" onclick="closeModal()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal(giftTitle) {
+            document.getElementById('giftName').innerText = giftTitle;
+            document.getElementById('reserveModal').style.display = 'block';
+            document.getElementById('reserveModal').style.display = 'flex';
+            document.getElementById('modalForm').style.display = 'block';
+            document.getElementById('modalThanks').style.display = 'none';
+        }
+
+        function closeModal() {
+            document.getElementById('reserveModal').style.display = 'none';
+        }
+
+        function submitReservation() {
+            const name = document.getElementById('name').value;
+            if(!name) {
+                alert('Por favor ingresa tu nombre');
+                return;
+            }
+            // Aquí es donde tu esposo conectará el código para guardar los datos
+            
+            // Cambiar a la carta de agradecimiento
+            document.getElementById('modalForm').style.display = 'none';
+            document.getElementById('thanksText').innerText = `¡Muchas gracias, ${name}! Tu regalo nos hace muy felices y será de gran ayuda para la llegada de nuestro bebé.`;
+            document.getElementById('modalThanks').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
