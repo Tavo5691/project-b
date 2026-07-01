@@ -1,12 +1,21 @@
 // TypeScript types matching the Supabase schema
+//
+// NOTE: these are declared with `type`, not `interface`. The Supabase
+// client's generic `.rpc()` / `.from()` inference (postgrest-js 2.x) relies
+// on deeply nested conditional types keyed off `Database['public']`. When
+// these row shapes are `interface`s, TypeScript's inference backs off and
+// every `.rpc()` call's `args` parameter collapses to `never`, which then
+// rejects any object literal. Type aliases resolve eagerly and keep the
+// inference working. Verified in isolation against @supabase/postgrest-js
+// 2.108.2 — do not convert these back to `interface`.
 
-export interface Category {
+export type Category = {
   id: string
   name: string
   created_at: string
 }
 
-export interface Settings {
+export type Settings = {
   id: 1
   welcome_title: string
   welcome_subtitle: string
@@ -20,7 +29,7 @@ export interface Settings {
   bank_holder: string
 }
 
-export interface Gift {
+export type Gift = {
   id: string
   category_id: string
   name: string
@@ -31,7 +40,7 @@ export interface Gift {
   created_at: string
 }
 
-export interface Reservation {
+export type Reservation = {
   id: string
   gift_id: string
   first_name: string
@@ -41,23 +50,23 @@ export interface Reservation {
   created_at: string
 }
 
-export interface ReservationWithGift extends Reservation {
+export type ReservationWithGift = Reservation & {
   gift: Gift
 }
 
-export interface GiftWithCategory extends Gift {
+export type GiftWithCategory = Gift & {
   category: Category
 }
 
 // RPC return types
 
-export interface ReserveGiftResult {
+export type ReserveGiftResult = {
   success: boolean
   cancel_token?: string
   error?: 'already_reserved'
 }
 
-export interface CancelReservationResult {
+export type CancelReservationResult = {
   success: boolean
   gift_name?: string
   first_name?: string
@@ -65,7 +74,7 @@ export interface CancelReservationResult {
   error?: 'not_found'
 }
 
-export interface CancelReservationAdminResult {
+export type CancelReservationAdminResult = {
   success: boolean
   error?: 'not_found'
 }
@@ -78,23 +87,30 @@ export type Database = {
         Row: Category
         Insert: Omit<Category, 'id' | 'created_at'>
         Update: Partial<Omit<Category, 'id' | 'created_at'>>
+        Relationships: []
       }
       settings: {
         Row: Settings
         Insert: Partial<Settings>
         Update: Partial<Omit<Settings, 'id'>>
+        Relationships: []
       }
       gifts: {
         Row: Gift
         Insert: Omit<Gift, 'id' | 'created_at'>
         Update: Partial<Omit<Gift, 'id' | 'created_at'>>
+        Relationships: []
       }
       reservations: {
         Row: Reservation
         Insert: Omit<Reservation, 'id' | 'created_at'>
         Update: Partial<Omit<Reservation, 'id' | 'created_at'>>
+        Relationships: []
       }
     }
+    // No database views yet — required by @supabase/postgrest-js's
+    // GenericSchema constraint even when empty.
+    Views: Record<string, never>
     Functions: {
       reserve_gift: {
         Args: {
