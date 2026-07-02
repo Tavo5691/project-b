@@ -72,11 +72,17 @@ function CategoryRow({ category, onDeleted }: CategoryRowProps) {
     FormData
   >(renameCategory, null)
 
-  useEffect(() => {
+  // Close the inline edit form once the rename succeeds. Adjusted during
+  // render (not in an effect) by comparing against the previous action
+  // state, per React's "storing info from previous renders" pattern —
+  // avoids the cascading-render lint violation from setState-in-effect.
+  const [prevRenameState, setPrevRenameState] = useState(renameState)
+  if (renameState !== prevRenameState) {
+    setPrevRenameState(renameState)
     if (renameState?.success) {
       setIsEditing(false)
     }
-  }, [renameState])
+  }
 
   function handleDelete() {
     setDeleteError(null)
