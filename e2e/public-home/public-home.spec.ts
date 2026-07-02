@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { PublicHomePage } from './public-home-page'
+import { CancelarPage } from '../cancelar/cancelar-page'
 
 // Primary channel is WhatsApp — the reservation journey is verified at the
 // 375px mobile viewport per the design doc's testing strategy.
@@ -20,6 +21,14 @@ test.describe('Public gift list — reserve flow', () => {
 
       const cancelCode = await homePage.verifyReservationSucceeded()
       expect(cancelCode).toMatch(/^[A-Z]+-\d{4}$/)
+
+      // Cancel what we just reserved: fixture DB has no per-test isolation
+      // (no seed/teardown), so leaving the gift reserved would starve every
+      // other spec that also needs an available gift to reserve.
+      await homePage.closeModal()
+      const cancelarPage = new CancelarPage(page)
+      await cancelarPage.goto()
+      await cancelarPage.cancelWithCode(cancelCode)
     }
   )
 })

@@ -19,7 +19,10 @@ test.describe('Admin authentication', () => {
       await loginPage.goto()
       await loginPage.login('definitely-wrong-password')
 
-      await expect(page.getByRole('alert')).toHaveText('Contraseña incorrecta')
+      // Scoped by text, not role=alert: Next.js's own route announcer
+      // (#__next-route-announcer__) also carries role="alert", so
+      // getByRole('alert') alone matches two elements.
+      await expect(page.getByText('Contraseña incorrecta')).toBeVisible()
       await expect(page).toHaveURL(/\/admin\/login$/)
     }
   )
