@@ -4,9 +4,10 @@ import type { Gift } from '@/types/database'
 
 interface GiftCardProps {
   gift: Gift
+  onReserve: (gift: Gift) => void
 }
 
-export function GiftCard({ gift }: GiftCardProps) {
+export function GiftCard({ gift, onReserve }: GiftCardProps) {
   const isReserved = gift.status === 'reserved'
 
   return (
@@ -34,13 +35,7 @@ export function GiftCard({ gift }: GiftCardProps) {
         )}
       </div>
 
-      {isReserved ? (
-        <span className="inline-block w-fit rounded bg-border px-3 py-1 text-xs font-medium text-text-muted">
-          Reservado
-        </span>
-      ) : (
-        <ReserveButton giftId={gift.id} giftName={gift.name} />
-      )}
+      <ReserveButton isReserved={isReserved} onReserve={() => onReserve(gift)} />
     </div>
   )
 }

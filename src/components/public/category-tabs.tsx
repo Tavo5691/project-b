@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { GiftCard } from '@/components/public/gift-card'
+import { ReserveModal } from '@/components/public/reserve-modal'
 import type { Category, GiftWithCategory } from '@/types/database'
 
 interface CategoryTabsProps {
@@ -15,6 +16,7 @@ const EMPTY_CATEGORY_MESSAGE =
 
 export function CategoryTabs({ categories, gifts }: CategoryTabsProps) {
   const [activeCategoryId, setActiveCategoryId] = useState<string | undefined>(categories[0]?.id)
+  const [reservingGift, setReservingGift] = useState<{ id: string; name: string } | null>(null)
 
   const filteredGifts = gifts.filter((gift) => gift.category_id === activeCategoryId)
   // Vacuously true for an empty category, so "no gifts assigned yet" and
@@ -53,9 +55,17 @@ export function CategoryTabs({ categories, gifts }: CategoryTabsProps) {
       ) : (
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
           {filteredGifts.map((gift) => (
-            <GiftCard key={gift.id} gift={gift} />
+            <GiftCard key={gift.id} gift={gift} onReserve={setReservingGift} />
           ))}
         </div>
+      )}
+
+      {reservingGift && (
+        <ReserveModal
+          giftId={reservingGift.id}
+          giftName={reservingGift.name}
+          onClose={() => setReservingGift(null)}
+        />
       )}
     </div>
   )
