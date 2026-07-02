@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { createAdminClient } from '@/lib/supabase/server'
 import { adminLogout } from '@/actions/admin-auth'
 import { AdminTabs } from '@/components/admin/admin-tabs'
@@ -48,11 +49,16 @@ export default async function AdminPage() {
     <main className="mx-auto flex max-w-5xl flex-col gap-6 p-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-primary">Panel de administración</h1>
-        <form action={adminLogout}>
-          <button type="submit" className="text-sm text-text-muted underline">
-            Cerrar sesión
-          </button>
-        </form>
+        <div className="flex items-center gap-4">
+          <Link href="/" className="text-sm text-primary underline">
+            Ver sitio público
+          </Link>
+          <form action={adminLogout}>
+            <button type="submit" className="text-sm text-text-muted underline">
+              Cerrar sesión
+            </button>
+          </form>
+        </div>
       </div>
       <AdminTabs
         settings={safeSettings}
