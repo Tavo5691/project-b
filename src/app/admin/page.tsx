@@ -1,12 +1,65 @@
-// Admin dashboard — stub for PR 1
-// Full implementation comes in PR 3
-export default function AdminPage() {
+import { createAdminClient } from '@/lib/supabase/server'
+import { adminLogout } from '@/actions/admin-auth'
+import { AdminTabs } from '@/components/admin/admin-tabs'
+import type {
+  Category,
+  GiftWithCategory,
+  ReservationWithGift,
+  Settings,
+} from '@/types/database'
+
+const DEFAULT_SETTINGS: Settings = {
+  id: 1,
+  welcome_title: '',
+  welcome_subtitle: '',
+  event_date: '',
+  event_time: '',
+  event_address: '',
+  maps_url: '',
+  cash_note: '',
+  bank_name: '',
+  bank_account: '',
+  bank_holder: '',
+}
+
+export default async function AdminPage() {
+  const supabase = await createAdminClient()
+
+  const [{ data: settings }, { data: categories }, { data: gifts }, { data: reservations }] =
+    await Promise.all([
+      supabase.from('settings').select('*').eq('id', 1).single(),
+      supabase.from('categories').select('*').order('name', { ascending: true }),
+      supabase
+        .from('gifts')
+        .select('*, category:categories(id, name, created_at)')
+        .order('name', { ascending: true }),
+      supabase
+        .from('reservations')
+        .select('*, gift:gifts(*)')
+        .order('created_at', { ascending: false }),
+    ])
+
+  const safeSettings = (settings as Settings | null) ?? DEFAULT_SETTINGS
+  const safeCategories = (categories ?? []) as Category[]
+  const safeGifts = (gifts ?? []) as unknown as GiftWithCategory[]
+  const safeReservations = (reservations ?? []) as unknown as ReservationWithGift[]
+
   return (
-    <main className="p-8">
-      <h1 style={{ color: 'var(--color-primary)' }}>Panel de administración</h1>
-      <p style={{ color: 'var(--color-text-muted)' }}>
-        Dashboard en construcción — próximamente disponible.
-      </p>
+    <main className="mx-auto flex max-w-5xl flex-col gap-6 p-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold text-primary">Panel de administración</h1>
+        <form action={adminLogout}>
+          <button type="submit" className="text-sm text-text-muted underline">
+            Cerrar sesión
+          </button>
+        </form>
+      </div>
+      <AdminTabs
+        settings={safeSettings}
+        categories={safeCategories}
+        gifts={safeGifts}
+        reservations={safeReservations}
+      />
     </main>
   )
 }
