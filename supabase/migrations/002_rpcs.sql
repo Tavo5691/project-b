@@ -37,13 +37,11 @@ DECLARE
   v_reservation reservations%ROWTYPE;
   v_gift_name   TEXT;
 BEGIN
-  SELECT r.*, g.name INTO v_reservation, v_gift_name
-  FROM reservations r
-  JOIN gifts g ON g.id = r.gift_id
-  WHERE r.cancel_token = p_cancel_token;
+  SELECT * INTO v_reservation FROM reservations WHERE cancel_token = p_cancel_token;
   IF NOT FOUND THEN
     RETURN jsonb_build_object('success', false, 'error', 'not_found');
   END IF;
+  SELECT name INTO v_gift_name FROM gifts WHERE id = v_reservation.gift_id;
   DELETE FROM reservations WHERE id = v_reservation.id;
   UPDATE gifts SET status = 'available' WHERE id = v_reservation.gift_id;
   RETURN jsonb_build_object(
