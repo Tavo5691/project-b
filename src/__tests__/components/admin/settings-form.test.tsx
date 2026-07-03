@@ -1,0 +1,61 @@
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+
+const updateSettingsMock = vi.fn()
+vi.mock('@/actions/admin/settings', () => ({
+  updateSettings: (...args: unknown[]) => updateSettingsMock(...args),
+}))
+
+import { SettingsForm } from '@/components/admin/settings-form'
+import type { Settings } from '@/types/database'
+
+const settings: Settings = {
+  id: 1,
+  welcome_title: 'Bienvenidos',
+  welcome_subtitle: 'Los esperamos',
+  event_date: '2026-08-01',
+  event_time: '16:00',
+  event_address: 'Calle Falsa 123',
+  maps_url: 'https://maps.google.com/x',
+  cash_note: 'Aceptamos efectivo',
+  bank_name: 'Banco Test',
+  bank_account: 'alias.test',
+  bank_holder: 'Ana Perez',
+}
+
+describe('SettingsForm', () => {
+  beforeEach(() => {
+    updateSettingsMock.mockReset()
+  })
+
+  it('pre-populates fields from the current settings row', () => {
+    render(<SettingsForm settings={settings} />)
+    expect(screen.getByLabelText('Título de bienvenida')).toHaveValue('Bienvenidos')
+    expect(screen.getByLabelText('Banco')).toHaveValue('Banco Test')
+  })
+
+  it('shows a success message after saving', async () => {
+    updateSettingsMock.mockResolvedValueOnce({ success: true })
+    render(<SettingsForm settings={settings} />)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Guardar cambios' }))
+
+    await waitFor(() => {
+      expect(screen.getByRole('status')).toHaveTextContent('Los cambios se guardaron correctamente.')
+    })
+  })
+
+  it('shows the error message when saving fails', async () => {
+    updateSettingsMock.mockResolvedValueOnce({
+      success: false,
+      error: 'No pudimos guardar los cambios.',
+    })
+    render(<SettingsForm settings={settings} />)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Guardar cambios' }))
+
+    await waitFor(() => {
+      expect(screen.getByRole('alert')).toHaveTextContent('No pudimos guardar los cambios.')
+    })
+  })
+})

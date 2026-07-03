@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { CancelForm } from '@/components/public/cancel-form'
 
 export default function CancelarPage() {
@@ -10,6 +11,9 @@ export default function CancelarPage() {
         </p>
       </div>
       <CancelForm />
+      <Link href="/" className="text-sm text-primary underline">
+        ← Volver al inicio
+      </Link>
     </main>
   )
 }

@@ -13,5 +13,8 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./vitest.setup.ts'],
     globals: true,
+    // Playwright owns e2e/**/*.spec.ts — keep Vitest from also collecting
+    // them (their `test`/`test.describe` API is Playwright's, not Vitest's).
+    exclude: ['node_modules/**', 'e2e/**'],
   },
 })

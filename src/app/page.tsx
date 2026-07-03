@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { EventInfo } from '@/components/public/event-info'
 import { BankSection } from '@/components/public/bank-section'
@@ -25,6 +26,12 @@ export default async function Home() {
       {safeSettings && <EventInfo settings={safeSettings} />}
       <CategoryTabs categories={safeCategories} gifts={safeGifts} />
       {safeSettings && <BankSection settings={safeSettings} />}
+
+      <footer className="text-center">
+        <Link href="/cancelar" className="text-sm text-primary underline">
+          ¿Ya reservaste y necesitás cancelar?
+        </Link>
+      </footer>
     </main>
   )
 }
