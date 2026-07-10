@@ -115,6 +115,21 @@ export function GiftForm({ categories, gift, onClose }: GiftFormProps) {
           />
         </div>
 
+        <div>
+          <label htmlFor="price" className="mb-1 block text-sm font-medium text-text">
+            Precio
+          </label>
+          <input
+            id="price"
+            name="price"
+            type="number"
+            min="0"
+            step="1"
+            defaultValue={gift?.price}
+            className="w-full rounded border border-border px-3 py-2 text-sm outline-none focus:ring-2"
+          />
+        </div>
+
         {state && !state.success && (
           <p className="text-sm text-red-600" role="alert">
             {SAVE_ERROR_MESSAGE}

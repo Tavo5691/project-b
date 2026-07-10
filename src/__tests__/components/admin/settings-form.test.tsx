@@ -21,6 +21,7 @@ const settings: Settings = {
   bank_name: 'Banco Test',
   bank_account: 'alias.test',
   bank_holder: 'Ana Perez',
+  gallery_urls: [],
 }
 
 describe('SettingsForm', () => {
@@ -32,6 +33,37 @@ describe('SettingsForm', () => {
     render(<SettingsForm settings={settings} />)
     expect(screen.getByLabelText('Título de bienvenida')).toHaveValue('Bienvenidos')
     expect(screen.getByLabelText('Banco')).toHaveValue('Banco Test')
+  })
+
+  it('pre-populates the gallery URL list from settings.gallery_urls', () => {
+    render(
+      <SettingsForm
+        settings={{ ...settings, gallery_urls: ['https://example.com/a.jpg'] }}
+      />
+    )
+    expect(screen.getByDisplayValue('https://example.com/a.jpg')).toBeInTheDocument()
+  })
+
+  it('adds a new empty gallery URL row when "Agregar foto" is clicked', () => {
+    render(<SettingsForm settings={{ ...settings, gallery_urls: [] }} />)
+    expect(screen.queryAllByPlaceholderText('https://...')).toHaveLength(0)
+    fireEvent.click(screen.getByRole('button', { name: 'Agregar foto' }))
+    expect(screen.getAllByPlaceholderText('https://...')).toHaveLength(1)
+  })
+
+  it('removes a gallery URL row when its "Quitar" button is clicked', () => {
+    render(
+      <SettingsForm
+        settings={{
+          ...settings,
+          gallery_urls: ['https://example.com/a.jpg', 'https://example.com/b.jpg'],
+        }}
+      />
+    )
+    expect(screen.getAllByPlaceholderText('https://...')).toHaveLength(2)
+    fireEvent.click(screen.getAllByRole('button', { name: 'Quitar' })[0])
+    expect(screen.getAllByPlaceholderText('https://...')).toHaveLength(1)
+    expect(screen.getByDisplayValue('https://example.com/b.jpg')).toBeInTheDocument()
   })
 
   it('shows a success message after saving', async () => {

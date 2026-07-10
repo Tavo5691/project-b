@@ -30,6 +30,7 @@ const VALID_GIFT = {
   description: 'Coche 3 en 1',
   image_url: 'https://example.com/img.png',
   external_link: 'https://example.com/product',
+  price: '15000',
 }
 
 describe('createGift', () => {
@@ -51,16 +52,35 @@ describe('createGift', () => {
     expect(insertMock).not.toHaveBeenCalled()
   })
 
-  it('creates the gift as available and revalidates / and /admin', async () => {
+  it('returns invalid_input when price is missing', async () => {
+    const result = await createGift(null, buildFormData({ ...VALID_GIFT, price: '' }))
+    expect(result).toEqual({ success: false, error: 'invalid_input' })
+    expect(insertMock).not.toHaveBeenCalled()
+  })
+
+  it('returns invalid_input when price is negative', async () => {
+    const result = await createGift(null, buildFormData({ ...VALID_GIFT, price: '-5' }))
+    expect(result).toEqual({ success: false, error: 'invalid_input' })
+    expect(insertMock).not.toHaveBeenCalled()
+  })
+
+  it('creates the gift as available with price and revalidates /regalos and /admin', async () => {
     insertMock.mockResolvedValueOnce({ error: null })
     const result = await createGift(null, buildFormData(VALID_GIFT))
     expect(result).toEqual({ success: true })
     expect(fromMock).toHaveBeenCalledWith('gifts')
     expect(insertMock).toHaveBeenCalledWith(
-      expect.objectContaining({ name: 'Coche de bebé', status: 'available' })
+      expect.objectContaining({ name: 'Coche de bebé', status: 'available', price: 15000 })
     )
     expect(revalidatePath).toHaveBeenCalledWith('/admin')
-    expect(revalidatePath).toHaveBeenCalledWith('/')
+    expect(revalidatePath).toHaveBeenCalledWith('/regalos')
+  })
+
+  it('accepts a price of exactly 0 (unpriced gift)', async () => {
+    insertMock.mockResolvedValueOnce({ error: null })
+    const result = await createGift(null, buildFormData({ ...VALID_GIFT, price: '0' }))
+    expect(result).toEqual({ success: true })
+    expect(insertMock).toHaveBeenCalledWith(expect.objectContaining({ price: 0 }))
   })
 })
 
@@ -77,19 +97,19 @@ describe('updateGift', () => {
     expect(updateMock).not.toHaveBeenCalled()
   })
 
-  it('updates the gift and revalidates / and /admin on success', async () => {
+  it('updates the gift with price and revalidates /regalos and /admin on success', async () => {
     updateEqMock.mockResolvedValueOnce({ error: null })
     const result = await updateGift(
       null,
-      buildFormData({ ...VALID_GIFT, gift_id: 'gift-1', name: 'Coche actualizado' })
+      buildFormData({ ...VALID_GIFT, gift_id: 'gift-1', name: 'Coche actualizado', price: '20000' })
     )
     expect(result).toEqual({ success: true })
     expect(updateMock).toHaveBeenCalledWith(
-      expect.objectContaining({ name: 'Coche actualizado' })
+      expect.objectContaining({ name: 'Coche actualizado', price: 20000 })
     )
     expect(updateEqMock).toHaveBeenCalledWith('id', 'gift-1')
     expect(revalidatePath).toHaveBeenCalledWith('/admin')
-    expect(revalidatePath).toHaveBeenCalledWith('/')
+    expect(revalidatePath).toHaveBeenCalledWith('/regalos')
   })
 })
 
@@ -100,13 +120,13 @@ describe('deleteGift', () => {
     vi.mocked(revalidatePath).mockClear()
   })
 
-  it('deletes the gift and revalidates / and /admin on success', async () => {
+  it('deletes the gift and revalidates /regalos and /admin on success', async () => {
     deleteEqMock.mockResolvedValueOnce({ error: null })
     const result = await deleteGift('gift-1')
     expect(result).toEqual({ success: true })
     expect(deleteEqMock).toHaveBeenCalledWith('id', 'gift-1')
     expect(revalidatePath).toHaveBeenCalledWith('/admin')
-    expect(revalidatePath).toHaveBeenCalledWith('/')
+    expect(revalidatePath).toHaveBeenCalledWith('/regalos')
   })
 
   it('returns db_error when the delete fails', async () => {

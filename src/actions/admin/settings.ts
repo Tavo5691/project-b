@@ -15,6 +15,7 @@ const settingsSchema = z.object({
   bank_name: z.string().optional(),
   bank_account: z.string().optional(),
   bank_holder: z.string().optional(),
+  gallery_urls: z.array(z.url({ error: 'URL inválida' })).default([]),
 })
 
 export type SettingsResult = { success: true } | { success: false; error: string }
@@ -38,6 +39,7 @@ export async function updateSettings(
     bank_name: formData.get('bank_name') ?? '',
     bank_account: formData.get('bank_account') ?? '',
     bank_holder: formData.get('bank_holder') ?? '',
+    gallery_urls: formData.getAll('gallery_url'),
   })
 
   if (!parsed.success) {
@@ -54,5 +56,6 @@ export async function updateSettings(
   }
 
   revalidatePath('/admin')
+  revalidatePath('/')
   return { success: true }
 }

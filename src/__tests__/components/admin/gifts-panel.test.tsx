@@ -25,6 +25,7 @@ function makeGift(overrides: Partial<GiftWithCategory>): GiftWithCategory {
     image_url: '',
     external_link: '',
     status: 'available',
+    price: 0,
     created_at: '',
     category: categories[0],
     ...overrides,
@@ -32,8 +33,8 @@ function makeGift(overrides: Partial<GiftWithCategory>): GiftWithCategory {
 }
 
 const gifts: GiftWithCategory[] = [
-  makeGift({ id: 'g1', category_id: 'cat-1', name: 'Olla', category: categories[0] }),
-  makeGift({ id: 'g2', category_id: 'cat-2', name: 'Chupete', category: categories[1] }),
+  makeGift({ id: 'g1', category_id: 'cat-1', name: 'Olla', price: 15000, category: categories[0] }),
+  makeGift({ id: 'g2', category_id: 'cat-2', name: 'Chupete', price: 0, category: categories[1] }),
 ]
 
 describe('GiftsPanel', () => {
@@ -46,6 +47,16 @@ describe('GiftsPanel', () => {
     expect(screen.getByText('Olla')).toBeInTheDocument()
     expect(screen.getByText('Chupete')).toBeInTheDocument()
     expect(screen.getAllByText('Cocina').length).toBeGreaterThan(0)
+  })
+
+  it('shows the formatted price for a priced gift', () => {
+    render(<GiftsPanel gifts={gifts} categories={categories} />)
+    expect(screen.getByText('$15.000')).toBeInTheDocument()
+  })
+
+  it('shows no price text for an unpriced (price=0) gift', () => {
+    render(<GiftsPanel gifts={gifts} categories={categories} />)
+    expect(screen.queryByText('$0')).not.toBeInTheDocument()
   })
 
   it('filters gifts by category', () => {

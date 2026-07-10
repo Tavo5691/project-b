@@ -24,6 +24,7 @@ const existingGift: Gift = {
   image_url: '',
   external_link: '',
   status: 'available',
+  price: 0,
   created_at: '',
 }
 
@@ -39,7 +40,9 @@ describe('GiftForm', () => {
     render(<GiftForm categories={categories} onClose={onClose} />)
 
     expect(screen.getByLabelText('Nombre')).toHaveValue('')
+    expect(screen.getByLabelText('Precio')).toHaveValue(null)
     fireEvent.change(screen.getByLabelText('Nombre'), { target: { value: 'Coche' } })
+    fireEvent.change(screen.getByLabelText('Precio'), { target: { value: '15000' } })
     fireEvent.click(screen.getByRole('button', { name: 'Guardar' }))
 
     await waitFor(() => {
@@ -50,12 +53,13 @@ describe('GiftForm', () => {
     })
   })
 
-  it('pre-populates fields and calls updateGift in edit mode', async () => {
+  it('pre-populates fields, including price, and calls updateGift in edit mode', async () => {
     const onClose = vi.fn()
     updateGiftMock.mockResolvedValueOnce({ success: true })
-    render(<GiftForm categories={categories} gift={existingGift} onClose={onClose} />)
+    render(<GiftForm categories={categories} gift={{ ...existingGift, price: 8000 }} onClose={onClose} />)
 
     expect(screen.getByLabelText('Nombre')).toHaveValue('Olla')
+    expect(screen.getByLabelText('Precio')).toHaveValue(8000)
     fireEvent.click(screen.getByRole('button', { name: 'Guardar' }))
 
     await waitFor(() => {

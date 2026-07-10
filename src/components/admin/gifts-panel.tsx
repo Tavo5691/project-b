@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react'
 import { deleteGift } from '@/actions/admin/gifts'
 import { GiftForm } from '@/components/admin/gift-form'
+import { formatARS } from '@/lib/utils'
 import type { Category, Gift, GiftWithCategory } from '@/types/database'
 
 interface GiftsPanelProps {
@@ -92,6 +93,12 @@ export function GiftsPanel({ gifts: initialGifts, categories }: GiftsPanelProps)
               <span className="text-xs text-text-muted">
                 {gift.category.name} ·{' '}
                 {gift.status === 'reserved' ? 'Reservado' : 'Disponible'}
+                {gift.price > 0 && (
+                  <>
+                    {' '}
+                    · <span>{formatARS(gift.price)}</span>
+                  </>
+                )}
               </span>
             </div>
             <div className="flex gap-2">
