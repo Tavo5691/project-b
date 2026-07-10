@@ -19,6 +19,6 @@ describe('formatARS()', () => {
   })
 
   it('never renders decimals, even if given a fractional input', () => {
-    expect(formatARS(1500.75)).not.toContain(',')
+    expect(formatARS(1500.75)).toBe('$1.500')
   })
 })
