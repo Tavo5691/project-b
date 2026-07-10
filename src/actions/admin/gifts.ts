@@ -3,6 +3,7 @@
 import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
 import { createAdminClient } from '@/lib/supabase/server'
+import { verifyAdminSession } from '@/actions/admin-auth'
 
 const giftSchema = z.object({
   category_id: z.string().min(1, { error: 'Elegí una categoría' }),
@@ -11,7 +12,11 @@ const giftSchema = z.object({
   image_url: z.string().optional(),
   external_link: z.string().optional(),
   price: z.preprocess(
-    (val) => (val === '' || val === null ? undefined : val),
+    (val) => {
+      if (val === null || val === '') return undefined
+      if (typeof val === 'string' && val.trim() === '') return undefined
+      return val
+    },
     z.coerce.number().int().min(0, { error: 'El precio debe ser 0 o mayor' })
   ),
 })
@@ -38,6 +43,10 @@ export async function createGift(
   _prevState: GiftResult | null,
   formData: FormData
 ): Promise<GiftResult> {
+  if (!(await verifyAdminSession())) {
+    return { success: false, error: 'invalid_input' }
+  }
+
   const parsed = parseGiftFields(formData)
   if (!parsed.success) {
     return { success: false, error: 'invalid_input' }
@@ -67,6 +76,10 @@ export async function updateGift(
   _prevState: GiftResult | null,
   formData: FormData
 ): Promise<GiftResult> {
+  if (!(await verifyAdminSession())) {
+    return { success: false, error: 'invalid_input' }
+  }
+
   const giftId = formData.get('gift_id')
   const parsed = parseGiftFields(formData)
 
@@ -97,6 +110,10 @@ export async function updateGift(
 }
 
 export async function deleteGift(giftId: string): Promise<GiftResult> {
+  if (!(await verifyAdminSession())) {
+    return { success: false, error: 'invalid_input' }
+  }
+
   const supabase = await createAdminClient()
   const { error } = await supabase.from('gifts').delete().eq('id', giftId)
 

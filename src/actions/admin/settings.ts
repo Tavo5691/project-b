@@ -3,6 +3,7 @@
 import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
 import { createAdminClient } from '@/lib/supabase/server'
+import { verifyAdminSession } from '@/actions/admin-auth'
 
 const settingsSchema = z.object({
   welcome_title: z.string().min(1, { error: 'El título es obligatorio' }),
@@ -28,6 +29,10 @@ export async function updateSettings(
   _prevState: SettingsResult | null,
   formData: FormData
 ): Promise<SettingsResult> {
+  if (!(await verifyAdminSession())) {
+    return { success: false, error: 'Revisá los campos del formulario.' }
+  }
+
   const parsed = settingsSchema.safeParse({
     welcome_title: formData.get('welcome_title'),
     welcome_subtitle: formData.get('welcome_subtitle') ?? '',

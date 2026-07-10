@@ -14,9 +14,13 @@ vi.mock('@/lib/supabase/server', () => ({
   createAdminClient: vi.fn(async () => ({ from: fromMock })),
 }))
 vi.mock('next/cache', () => ({ revalidatePath: vi.fn() }))
+vi.mock('@/actions/admin-auth', () => ({
+  verifyAdminSession: vi.fn(async () => true),
+}))
 
 import { createGift, updateGift, deleteGift } from '@/actions/admin/gifts'
 import { revalidatePath } from 'next/cache'
+import { verifyAdminSession } from '@/actions/admin-auth'
 
 function buildFormData(fields: Record<string, string>) {
   const fd = new FormData()
@@ -38,6 +42,14 @@ describe('createGift', () => {
     insertMock.mockReset()
     fromMock.mockClear()
     vi.mocked(revalidatePath).mockClear()
+    vi.mocked(verifyAdminSession).mockClear().mockResolvedValue(true)
+  })
+
+  it('returns invalid_input when the admin session is not verified', async () => {
+    vi.mocked(verifyAdminSession).mockResolvedValueOnce(false)
+    const result = await createGift(null, buildFormData(VALID_GIFT))
+    expect(result).toEqual({ success: false, error: 'invalid_input' })
+    expect(insertMock).not.toHaveBeenCalled()
   })
 
   it('returns invalid_input when name is missing', async () => {
@@ -60,6 +72,24 @@ describe('createGift', () => {
 
   it('returns invalid_input when price is negative', async () => {
     const result = await createGift(null, buildFormData({ ...VALID_GIFT, price: '-5' }))
+    expect(result).toEqual({ success: false, error: 'invalid_input' })
+    expect(insertMock).not.toHaveBeenCalled()
+  })
+
+  it('returns invalid_input when price is whitespace-only (pre-migration guard)', async () => {
+    const result = await createGift(null, buildFormData({ ...VALID_GIFT, price: '   ' }))
+    expect(result).toEqual({ success: false, error: 'invalid_input' })
+    expect(insertMock).not.toHaveBeenCalled()
+  })
+
+  it('returns invalid_input when price is decimal (price must be integer)', async () => {
+    const result = await createGift(null, buildFormData({ ...VALID_GIFT, price: '15000.50' }))
+    expect(result).toEqual({ success: false, error: 'invalid_input' })
+    expect(insertMock).not.toHaveBeenCalled()
+  })
+
+  it('returns invalid_input when price is non-numeric', async () => {
+    const result = await createGift(null, buildFormData({ ...VALID_GIFT, price: 'abc' }))
     expect(result).toEqual({ success: false, error: 'invalid_input' })
     expect(insertMock).not.toHaveBeenCalled()
   })
@@ -89,6 +119,14 @@ describe('updateGift', () => {
     updateEqMock.mockReset()
     updateMock.mockClear()
     vi.mocked(revalidatePath).mockClear()
+    vi.mocked(verifyAdminSession).mockClear().mockResolvedValue(true)
+  })
+
+  it('returns invalid_input when the admin session is not verified', async () => {
+    vi.mocked(verifyAdminSession).mockResolvedValueOnce(false)
+    const result = await updateGift(null, buildFormData({ ...VALID_GIFT, gift_id: 'gft-1' }))
+    expect(result).toEqual({ success: false, error: 'invalid_input' })
+    expect(updateMock).not.toHaveBeenCalled()
   })
 
   it('returns invalid_input when gift_id is missing', async () => {
@@ -118,6 +156,14 @@ describe('deleteGift', () => {
     deleteEqMock.mockReset()
     deleteMock.mockClear()
     vi.mocked(revalidatePath).mockClear()
+    vi.mocked(verifyAdminSession).mockClear().mockResolvedValue(true)
+  })
+
+  it('returns invalid_input when the admin session is not verified', async () => {
+    vi.mocked(verifyAdminSession).mockResolvedValueOnce(false)
+    const result = await deleteGift('gift-1')
+    expect(result).toEqual({ success: false, error: 'invalid_input' })
+    expect(deleteMock).not.toHaveBeenCalled()
   })
 
   it('deletes the gift and revalidates /regalos and /admin on success', async () => {

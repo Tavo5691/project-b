@@ -6,9 +6,13 @@ vi.mock('@/lib/supabase/server', () => ({
   createAdminClient: vi.fn(async () => ({ from: fromMock })),
 }))
 vi.mock('next/cache', () => ({ revalidatePath: vi.fn() }))
+vi.mock('@/actions/admin-auth', () => ({
+  verifyAdminSession: vi.fn(async () => true),
+}))
 
 import { updateSettings } from '@/actions/admin/settings'
 import { revalidatePath } from 'next/cache'
+import { verifyAdminSession } from '@/actions/admin-auth'
 
 function buildFormData(fields: Record<string, string>, galleryUrls: string[] = []) {
   const fd = new FormData()
@@ -35,6 +39,15 @@ describe('updateSettings', () => {
     upsertMock.mockReset()
     fromMock.mockClear()
     vi.mocked(revalidatePath).mockClear()
+    vi.mocked(verifyAdminSession).mockClear().mockResolvedValue(true)
+  })
+
+  it('returns error when the admin session is not verified', async () => {
+    vi.mocked(verifyAdminSession).mockResolvedValueOnce(false)
+    const fd = buildFormData(VALID_FIELDS)
+    const result = await updateSettings(null, fd)
+    expect(result).toEqual({ success: false, error: 'Revisá los campos del formulario.' })
+    expect(upsertMock).not.toHaveBeenCalled()
   })
 
   it('returns invalid_input error when welcome_title is missing', async () => {
