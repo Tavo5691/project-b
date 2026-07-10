@@ -27,6 +27,7 @@ export type Settings = {
   bank_name: string
   bank_account: string
   bank_holder: string
+  gallery_urls: string[]
 }
 
 export type Gift = {
@@ -37,6 +38,7 @@ export type Gift = {
   image_url: string
   external_link: string
   status: 'available' | 'reserved'
+  price: number
   created_at: string
 }
 

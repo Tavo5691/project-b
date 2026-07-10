@@ -29,6 +29,7 @@ const settings: Settings = {
   bank_name: '',
   bank_account: '',
   bank_holder: '',
+  gallery_urls: [],
 }
 
 const categories: Category[] = [{ id: 'cat-1', name: 'Cocina', created_at: '' }]
@@ -42,6 +43,7 @@ const gifts: GiftWithCategory[] = [
     image_url: '',
     external_link: '',
     status: 'available',
+    price: 0,
     created_at: '',
     category: categories[0],
   },

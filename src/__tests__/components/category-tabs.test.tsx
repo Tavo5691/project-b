@@ -17,6 +17,7 @@ function makeGift(overrides: Partial<GiftWithCategory>): GiftWithCategory {
     image_url: '',
     external_link: '',
     status: 'available',
+    price: 0,
     created_at: '',
     category: categories[0],
     ...overrides,

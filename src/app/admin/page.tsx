@@ -21,6 +21,7 @@ const DEFAULT_SETTINGS: Settings = {
   bank_name: '',
   bank_account: '',
   bank_holder: '',
+  gallery_urls: [],
 }
 
 export default async function AdminPage() {

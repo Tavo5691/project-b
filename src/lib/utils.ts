@@ -3,6 +3,23 @@ export function cn(...classes: (string | undefined | null | false)[]): string {
   return classes.filter(Boolean).join(' ')
 }
 
+const ARS_FORMATTER = new Intl.NumberFormat('es-AR', {
+  style: 'currency',
+  currency: 'ARS',
+  maximumFractionDigits: 0,
+})
+
+/**
+ * Formats an integer ARS price for display (e.g. `formatARS(15000)` -> "$15.000").
+ * Callers decide whether `0` should be hidden (see `GiftCard`) — this
+ * function always formats whatever number it receives.
+ */
+export function formatARS(price: number): string {
+  // Intl's es-AR currency format renders "ARS 15.000"; replace the ISO code
+  // with a bare "$" to match the spec's exact expected output.
+  return ARS_FORMATTER.format(price).replace('ARS', '$').replace(/\s/g, '')
+}
+
 // Cancel code word list — 16 words (16 * 9000 = 144,000 combinations)
 const CANCEL_WORDS = [
   'ROSA', 'LUNA', 'SOL', 'MAR', 'BEBE', 'AMOR',
