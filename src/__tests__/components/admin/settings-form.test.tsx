@@ -90,4 +90,19 @@ describe('SettingsForm', () => {
       expect(screen.getByRole('alert')).toHaveTextContent('No pudimos guardar los cambios.')
     })
   })
+
+  it('renders gracefully when gallery_urls is undefined (pre-migration data)', () => {
+    render(
+      <SettingsForm
+        settings={
+          {
+            ...settings,
+            gallery_urls: undefined,
+          } as unknown as Settings
+        }
+      />
+    )
+    expect(screen.getByRole('button', { name: 'Agregar foto' })).toBeInTheDocument()
+    expect(screen.queryAllByPlaceholderText('https://...')).toHaveLength(0)
+  })
 })

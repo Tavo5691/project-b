@@ -26,7 +26,7 @@ export function SettingsForm({ settings }: SettingsFormProps) {
     updateSettings,
     null
   )
-  const [galleryUrls, setGalleryUrls] = useState<string[]>(settings.gallery_urls)
+  const [galleryUrls, setGalleryUrls] = useState<string[]>(settings.gallery_urls ?? [])
 
   function addGalleryUrl() {
     setGalleryUrls((current) => [...current, ''])
