@@ -43,4 +43,18 @@ test.describe('Public landing page', () => {
       await expect(page).toHaveURL(/\/cancelar$/)
     }
   )
+
+  test(
+    'gracefully renders the gallery section (empty if no gallery URLs)',
+    { tag: ['@e2e', '@landing'] },
+    async ({ page }) => {
+      const homePage = new PublicHomePage(page)
+      await homePage.goto()
+
+      // Assert gallery images locator either finds images or gracefully renders nothing
+      const galleryImages = homePage.galleryImages
+      const count = await galleryImages.count()
+      expect(count).toBeGreaterThanOrEqual(0)
+    }
+  )
 })

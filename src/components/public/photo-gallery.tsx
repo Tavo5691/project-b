@@ -14,6 +14,8 @@ export function PhotoGallery({ urls }: PhotoGalleryProps) {
 
   return (
     <div className="category-tabs">
+      {/* Intentionally reuses .category-tabs from globals.css for horizontal-scroll-strip
+          styling, not a copy-paste from CategoryTabs. */}
       {urls.map((url, index) => (
         <GalleryImage key={url + index} src={url} alt={`Foto ${index + 1}`} />
       ))}
