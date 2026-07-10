@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
 import Image from 'next/image'
+import { useImageFallback } from '@/lib/hooks/use-image-fallback'
 
 const PLACEHOLDER_SRC = '/images/gift-placeholder.svg'
 
@@ -11,11 +11,11 @@ interface GalleryImageProps {
 }
 
 /**
- * Client island for a single gallery tile: mirrors `GiftImage`'s `onError`
- * fallback pattern (broken external URL -> placeholder SVG).
+ * Client island for a single gallery tile: uses shared `useImageFallback` hook
+ * for onError fallback pattern (broken external URL -> placeholder SVG).
  */
 export function GalleryImage({ src, alt }: GalleryImageProps) {
-  const [currentSrc, setCurrentSrc] = useState(src.length > 0 ? src : PLACEHOLDER_SRC)
+  const [currentSrc, onError] = useImageFallback(src, PLACEHOLDER_SRC)
 
   return (
     <div className="relative aspect-square w-40 shrink-0 overflow-hidden rounded-lg bg-card-bg">
@@ -25,7 +25,7 @@ export function GalleryImage({ src, alt }: GalleryImageProps) {
         fill
         sizes="160px"
         className="object-cover"
-        onError={() => setCurrentSrc(PLACEHOLDER_SRC)}
+        onError={onError}
       />
     </div>
   )
