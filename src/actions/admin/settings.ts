@@ -3,6 +3,7 @@
 import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
 import { createAdminClient } from '@/lib/supabase/server'
+import { verifyAdminSession } from '@/actions/admin-auth'
 
 const settingsSchema = z.object({
   welcome_title: z.string().min(1, { error: 'El título es obligatorio' }),
@@ -15,6 +16,7 @@ const settingsSchema = z.object({
   bank_name: z.string().optional(),
   bank_account: z.string().optional(),
   bank_holder: z.string().optional(),
+  gallery_urls: z.array(z.url({ error: 'URL inválida' })).default([]),
 })
 
 export type SettingsResult = { success: true } | { success: false; error: string }
@@ -27,6 +29,10 @@ export async function updateSettings(
   _prevState: SettingsResult | null,
   formData: FormData
 ): Promise<SettingsResult> {
+  if (!(await verifyAdminSession())) {
+    return { success: false, error: 'Revisá los campos del formulario.' }
+  }
+
   const parsed = settingsSchema.safeParse({
     welcome_title: formData.get('welcome_title'),
     welcome_subtitle: formData.get('welcome_subtitle') ?? '',
@@ -38,6 +44,7 @@ export async function updateSettings(
     bank_name: formData.get('bank_name') ?? '',
     bank_account: formData.get('bank_account') ?? '',
     bank_holder: formData.get('bank_holder') ?? '',
+    gallery_urls: formData.getAll('gallery_url'),
   })
 
   if (!parsed.success) {
@@ -54,5 +61,6 @@ export async function updateSettings(
   }
 
   revalidatePath('/admin')
+  revalidatePath('/')
   return { success: true }
 }

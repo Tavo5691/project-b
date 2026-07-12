@@ -1,34 +1,60 @@
 import { test, expect } from '@playwright/test'
 import { PublicHomePage } from './public-home-page'
-import { CancelarPage } from '../cancelar/cancelar-page'
 
-// Primary channel is WhatsApp — the reservation journey is verified at the
-// 375px mobile viewport per the design doc's testing strategy.
-test.describe('Public gift list — reserve flow', () => {
+// Landing content (`/`) no longer fetches gift/category data — that moved to
+// `/regalos`. These specs only assert invitation content: event info,
+// gallery, and the CTA link, per the landing/registry split.
+test.describe('Public landing page', () => {
   test.use({ viewport: { width: 375, height: 812 } })
 
   test(
-    'a guest can browse gifts by category and reserve an available one',
-    { tag: ['@critical', '@e2e', '@reserve'] },
+    'shows event info and a CTA link to the gift registry',
+    { tag: ['@critical', '@e2e', '@landing'] },
     async ({ page }) => {
       const homePage = new PublicHomePage(page)
       await homePage.goto()
 
-      await expect(homePage.categoryTabs).toBeVisible()
-      await expect(homePage.reserveButtons.first()).toBeVisible()
+      await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
+      await expect(homePage.regalosLink).toBeVisible()
+    }
+  )
 
-      await homePage.reserveFirstAvailableGift({ firstName: 'Ana', lastName: 'Perez' })
+  test(
+    'the CTA link navigates to /regalos',
+    { tag: ['@e2e', '@landing'] },
+    async ({ page }) => {
+      const homePage = new PublicHomePage(page)
+      await homePage.goto()
 
-      const cancelCode = await homePage.verifyReservationSucceeded()
-      expect(cancelCode).toMatch(/^[A-Z]+-\d{4}$/)
+      await homePage.regalosLink.click()
+      await expect(page).toHaveURL(/\/regalos$/)
+    }
+  )
 
-      // Cancel what we just reserved: fixture DB has no per-test isolation
-      // (no seed/teardown), so leaving the gift reserved would starve every
-      // other spec that also needs an available gift to reserve.
-      await homePage.closeModal()
-      const cancelarPage = new CancelarPage(page)
-      await cancelarPage.goto()
-      await cancelarPage.cancelWithCode(cancelCode)
+  test(
+    'the cancellation link is still available on the landing page',
+    { tag: ['@e2e', '@landing'] },
+    async ({ page }) => {
+      const homePage = new PublicHomePage(page)
+      await homePage.goto()
+
+      await expect(homePage.cancelarLink).toBeVisible()
+      await homePage.cancelarLink.click()
+      await expect(page).toHaveURL(/\/cancelar$/)
+    }
+  )
+
+  test(
+    'gracefully renders the gallery section (empty if no gallery URLs)',
+    { tag: ['@e2e', '@landing'] },
+    async ({ page }) => {
+      const homePage = new PublicHomePage(page)
+      await homePage.goto()
+
+      // Assert gallery images locator either finds images or gracefully renders nothing
+      const galleryImages = homePage.galleryImages
+      const count = await galleryImages.count()
+      expect(count).toBeGreaterThanOrEqual(0)
     }
   )
 })

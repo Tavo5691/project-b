@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { PublicHomePage } from '../public-home/public-home-page'
+import { RegalosPage } from '../regalos/regalos-page'
 import { CancelarPage } from './cancelar-page'
 
 test.describe('Cancellation flow', () => {
@@ -10,12 +10,12 @@ test.describe('Cancellation flow', () => {
     { tag: ['@critical', '@e2e', '@cancel'] },
     async ({ page }) => {
       // Reserve first so we have a valid code to cancel — reuses the
-      // public-home Page Object rather than duplicating the reserve flow.
-      const homePage = new PublicHomePage(page)
-      await homePage.goto()
-      await homePage.reserveFirstAvailableGift({ firstName: 'Bruno', lastName: 'Diaz' })
-      const cancelCode = await homePage.verifyReservationSucceeded()
-      await homePage.closeModal()
+      // regalos Page Object rather than duplicating the reserve flow.
+      const regalosPage = new RegalosPage(page)
+      await regalosPage.goto()
+      await regalosPage.reserveFirstAvailableGift({ firstName: 'Bruno', lastName: 'Diaz' })
+      const cancelCode = await regalosPage.verifyReservationSucceeded()
+      await regalosPage.closeModal()
 
       const cancelarPage = new CancelarPage(page)
       await cancelarPage.goto()

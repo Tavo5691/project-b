@@ -39,3 +39,15 @@ export async function adminLogout(): Promise<void> {
   cookieStore.delete('admin_session')
   redirect('/admin/login')
 }
+
+/**
+ * Verifies that the admin session cookie is valid (set to '1').
+ * Returns true if valid, false otherwise.
+ * Called by Server Actions to enforce authorization at the action level,
+ * independent of the route middleware in proxy.ts.
+ */
+export async function verifyAdminSession(): Promise<boolean> {
+  const cookieStore = await cookies()
+  const session = cookieStore.get('admin_session')?.value
+  return session === '1'
+}

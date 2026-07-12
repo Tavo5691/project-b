@@ -3,6 +3,19 @@ export function cn(...classes: (string | undefined | null | false)[]): string {
   return classes.filter(Boolean).join(' ')
 }
 
+/**
+ * Formats an integer ARS price for display (e.g. `formatARS(15000)` -> "$15.000").
+ * Callers decide whether `0` should be hidden (see `GiftCard`) — this
+ * function always formats whatever number it receives.
+ * Uses manual formatting with period as thousands separator (locale-independent).
+ */
+export function formatARS(price: number): string {
+  // Truncate to integer, format with period as thousands separator
+  const integer = Math.trunc(price)
+  const formatted = integer.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+  return `$${formatted}`
+}
+
 // Cancel code word list — 16 words (16 * 9000 = 144,000 combinations)
 const CANCEL_WORDS = [
   'ROSA', 'LUNA', 'SOL', 'MAR', 'BEBE', 'AMOR',

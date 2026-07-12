@@ -6,13 +6,18 @@ vi.mock('@/lib/supabase/server', () => ({
   createAdminClient: vi.fn(async () => ({ from: fromMock })),
 }))
 vi.mock('next/cache', () => ({ revalidatePath: vi.fn() }))
+vi.mock('@/actions/admin-auth', () => ({
+  verifyAdminSession: vi.fn(async () => true),
+}))
 
 import { updateSettings } from '@/actions/admin/settings'
 import { revalidatePath } from 'next/cache'
+import { verifyAdminSession } from '@/actions/admin-auth'
 
-function buildFormData(fields: Record<string, string>) {
+function buildFormData(fields: Record<string, string>, galleryUrls: string[] = []) {
   const fd = new FormData()
   for (const [key, value] of Object.entries(fields)) fd.set(key, value)
+  for (const url of galleryUrls) fd.append('gallery_url', url)
   return fd
 }
 
@@ -34,6 +39,15 @@ describe('updateSettings', () => {
     upsertMock.mockReset()
     fromMock.mockClear()
     vi.mocked(revalidatePath).mockClear()
+    vi.mocked(verifyAdminSession).mockClear().mockResolvedValue(true)
+  })
+
+  it('returns error when the admin session is not verified', async () => {
+    vi.mocked(verifyAdminSession).mockResolvedValueOnce(false)
+    const fd = buildFormData(VALID_FIELDS)
+    const result = await updateSettings(null, fd)
+    expect(result).toEqual({ success: false, error: 'Revisá los campos del formulario.' })
+    expect(upsertMock).not.toHaveBeenCalled()
   })
 
   it('returns invalid_input error when welcome_title is missing', async () => {
@@ -43,7 +57,7 @@ describe('updateSettings', () => {
     expect(upsertMock).not.toHaveBeenCalled()
   })
 
-  it('upserts the settings row (id=1) and revalidates /admin on success', async () => {
+  it('upserts the settings row (id=1) and revalidates /admin and / on success', async () => {
     upsertMock.mockResolvedValueOnce({ error: null })
     const fd = buildFormData(VALID_FIELDS)
     const result = await updateSettings(null, fd)
@@ -51,10 +65,32 @@ describe('updateSettings', () => {
     expect(result).toEqual({ success: true })
     expect(fromMock).toHaveBeenCalledWith('settings')
     expect(upsertMock).toHaveBeenCalledWith(
-      expect.objectContaining({ id: 1, welcome_title: 'Bienvenidos a la fiesta' }),
+      expect.objectContaining({ id: 1, welcome_title: 'Bienvenidos a la fiesta', gallery_urls: [] }),
       { onConflict: 'id' }
     )
     expect(revalidatePath).toHaveBeenCalledWith('/admin')
+    expect(revalidatePath).toHaveBeenCalledWith('/')
+  })
+
+  it('accepts an array of valid gallery URLs via repeated gallery_url fields', async () => {
+    upsertMock.mockResolvedValueOnce({ error: null })
+    const galleryUrls = ['https://example.com/a.jpg', 'https://example.com/b.jpg']
+    const fd = buildFormData(VALID_FIELDS, galleryUrls)
+    const result = await updateSettings(null, fd)
+
+    expect(result).toEqual({ success: true })
+    expect(upsertMock).toHaveBeenCalledWith(
+      expect.objectContaining({ gallery_urls: galleryUrls }),
+      { onConflict: 'id' }
+    )
+  })
+
+  it('rejects an invalid gallery URL', async () => {
+    const fd = buildFormData(VALID_FIELDS, ['not-a-url'])
+    const result = await updateSettings(null, fd)
+
+    expect(result).toEqual({ success: false, error: 'Revisá los campos del formulario.' })
+    expect(upsertMock).not.toHaveBeenCalled()
   })
 
   it('returns db_error message when the upsert fails', async () => {

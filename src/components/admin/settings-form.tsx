@@ -1,6 +1,6 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useState } from 'react'
 import { updateSettings, type SettingsResult } from '@/actions/admin/settings'
 import type { Settings } from '@/types/database'
 
@@ -26,6 +26,19 @@ export function SettingsForm({ settings }: SettingsFormProps) {
     updateSettings,
     null
   )
+  const [galleryUrls, setGalleryUrls] = useState<string[]>(settings.gallery_urls ?? [])
+
+  function addGalleryUrl() {
+    setGalleryUrls((current) => [...current, ''])
+  }
+
+  function removeGalleryUrl(index: number) {
+    setGalleryUrls((current) => current.filter((_, i) => i !== index))
+  }
+
+  function updateGalleryUrl(index: number, value: string) {
+    setGalleryUrls((current) => current.map((url, i) => (i === index ? value : url)))
+  }
 
   return (
     <form action={action} className="flex flex-col gap-4">
@@ -58,6 +71,40 @@ export function SettingsForm({ settings }: SettingsFormProps) {
           </div>
         )
       )}
+
+      <div>
+        <span className="mb-1 block text-sm font-medium text-text">
+          Fotos de la galería
+        </span>
+        <div className="flex flex-col gap-2">
+          {galleryUrls.map((url, index) => (
+            <div key={index} className="flex gap-2">
+              <input
+                type="text"
+                name="gallery_url"
+                value={url}
+                placeholder="https://..."
+                onChange={(event) => updateGalleryUrl(index, event.target.value)}
+                className="w-full rounded border border-border px-3 py-2 text-sm outline-none focus:ring-2"
+              />
+              <button
+                type="button"
+                onClick={() => removeGalleryUrl(index)}
+                className="rounded border border-red-200 px-3 py-1 text-xs font-medium text-red-600"
+              >
+                Quitar
+              </button>
+            </div>
+          ))}
+        </div>
+        <button
+          type="button"
+          onClick={addGalleryUrl}
+          className="mt-2 rounded border border-border px-3 py-1 text-xs font-medium text-text"
+        >
+          Agregar foto
+        </button>
+      </div>
 
       {state?.success && (
         <p className="rounded bg-card-bg p-3 text-sm text-text" role="status">

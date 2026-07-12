@@ -26,6 +26,7 @@ const reservations: ReservationWithGift[] = [
       image_url: '',
       external_link: '',
       status: 'reserved',
+      price: 0,
       created_at: '',
     },
   },
