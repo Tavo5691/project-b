@@ -18,7 +18,6 @@ export function EventInfo({ settings }: EventInfoProps) {
       <h1 className="font-display text-3xl uppercase text-stencil-red sm:text-5xl">
         Baby Shower
       </h1>
-      {settings.welcome_subtitle && <p className="text-text">{settings.welcome_subtitle}</p>}
 
       <dl className="flex flex-col gap-2 rounded-2xl border-2 border-stencil-red px-6 py-4 text-sm text-text">
         {settings.event_date && (
@@ -39,29 +38,35 @@ export function EventInfo({ settings }: EventInfoProps) {
             <dd>{settings.event_address}</dd>
           </div>
         )}
+        {settings.maps_url && (
+          <div className="flex gap-2">
+            <dt className="font-medium">Mapa:</dt>
+            <dd>
+              <a
+                href={settings.maps_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block rounded-lg bg-teal px-6 py-3 text-sm font-block uppercase text-cream transition-opacity hover:opacity-90"
+              >
+                Ver en Google Maps
+              </a>
+            </dd>
+          </div>
+        )}
       </dl>
 
-      {settings.maps_url && (
-        <a
-          href={settings.maps_url}
-          target="_blank"
-          rel="noopener noreferrer"
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        {settings.cash_note && (
+          <p className="text-sm italic text-teal-dark">{settings.cash_note}</p>
+        )}
+
+        <Link
+          href="/regalos"
           className="w-fit rounded-lg bg-teal px-6 py-3 text-sm font-block uppercase text-cream transition-opacity hover:opacity-90"
         >
-          Ver en Google Maps
-        </a>
-      )}
-
-      {settings.cash_note && (
-        <p className="text-sm italic text-teal-dark">{settings.cash_note}</p>
-      )}
-
-      <Link
-        href="/regalos"
-        className="w-fit rounded-lg bg-teal px-6 py-3 text-sm font-block uppercase text-cream transition-opacity hover:opacity-90"
-      >
-        Lista de regalos
-      </Link>
+          Lista de regalos
+        </Link>
+      </div>
     </section>
   )
 }

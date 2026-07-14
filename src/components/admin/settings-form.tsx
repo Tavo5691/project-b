@@ -10,8 +10,8 @@ interface SettingsFormProps {
 
 const FIELDS: { name: keyof Omit<Settings, 'id'>; label: string; multiline?: boolean }[] = [
   { name: 'welcome_title', label: 'Título de bienvenida' },
-  { name: 'welcome_subtitle', label: 'Subtítulo' },
-  { name: 'intro_message', label: 'Mensaje de bienvenida', multiline: true },
+  { name: 'intro_message_1', label: 'Mensaje de bienvenida (parte 1)', multiline: true },
+  { name: 'intro_message_2', label: 'Mensaje de bienvenida (parte 2)', multiline: true },
   { name: 'event_date', label: 'Fecha del evento' },
   { name: 'event_time', label: 'Hora del evento' },
   { name: 'event_address', label: 'Dirección' },

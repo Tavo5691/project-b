@@ -19,7 +19,8 @@ export type Settings = {
   id: 1
   welcome_title: string
   welcome_subtitle: string
-  intro_message: string
+  intro_message_1: string
+  intro_message_2: string
   event_date: string
   event_time: string
   event_address: string
