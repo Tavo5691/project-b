@@ -11,7 +11,7 @@ export default function CancelarPage() {
         </p>
       </div>
       <CancelForm />
-      <Link href="/" className="text-sm text-primary underline">
+      <Link href="/invitacion" className="text-sm text-primary underline">
         ← Volver al inicio
       </Link>
     </main>

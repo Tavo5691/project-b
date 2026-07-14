@@ -16,6 +16,6 @@ export class PublicHomePage extends BasePage {
   }
 
   async goto(): Promise<void> {
-    await super.goto('/')
+    await super.goto('/invitacion')
   }
 }

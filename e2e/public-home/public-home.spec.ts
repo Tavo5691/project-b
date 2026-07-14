@@ -1,9 +1,11 @@
 import { test, expect } from '@playwright/test'
 import { PublicHomePage } from './public-home-page'
 
-// Landing content (`/`) no longer fetches gift/category data — that moved to
-// `/regalos`. These specs only assert invitation content: event info,
-// gallery, and the CTA link, per the landing/registry split.
+// Landing content now lives at `/invitacion` — `/` is a new splash gate
+// (see `e2e/splash/splash.spec.ts`). This content no longer fetches
+// gift/category data — that moved to `/regalos`. These specs only assert
+// invitation content: event info, gallery, and the CTA link, per the
+// landing/registry split.
 test.describe('Public landing page', () => {
   test.use({ viewport: { width: 375, height: 812 } })
 

@@ -6,14 +6,32 @@
   --color-text-muted: #5a6657;
   --color-border: #e1e7de;
   --color-text: #333333;
+
+  /* New brand tokens for the restyle (PR1) — exact values pending visual
+     tuning against the design PDF by a human. */
+  --color-cream: #FAF3C7;
+  --color-teal: #2F7D6E;
+  --color-teal-dark: #1F5B50;
+  --color-stencil-red: #C0392B;
 }
 
 body {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 400;
   line-height: 1.6;
   color: var(--color-text);
   background-color: #ffffff;
+}
+
+/* Display fonts for the `(public)` route group — loaded as CSS variables in
+   `src/app/(public)/layout.tsx`. Kept as plain utility classes (rather than
+   `@theme` font tokens) since they only apply to the public marketing pages,
+   not admin. */
+.font-display {
+  font-family: var(--font-stencil), serif;
+}
+.font-block {
+  font-family: var(--font-block), sans-serif;
 }
 
 /* Category tabs — horizontal scroll, no visible scrollbar */

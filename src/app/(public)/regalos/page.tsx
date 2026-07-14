@@ -22,7 +22,7 @@ export default async function RegalosPage() {
 
   return (
     <main className="mx-auto flex max-w-4xl flex-col gap-8 p-6">
-      <Link href="/" className="text-sm text-primary underline">
+      <Link href="/invitacion" className="text-sm text-primary underline">
         ← Volver al inicio
       </Link>
 
