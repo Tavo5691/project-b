@@ -1,18 +1,26 @@
+import Link from 'next/link'
 import type { Settings } from '@/types/database'
 
 interface EventInfoProps {
   settings: Settings
 }
 
+/**
+ * The "BABY SHOWER" section from the design PDF: static stencil-red
+ * headline (welcome_title is intentionally not rendered here — it already
+ * shows on the `/` splash page), a bracket-style bordered box for
+ * Fecha/Hora/Lugar, and the "Lista de regalos" CTA (moved in from
+ * `invitacion/page.tsx` in PR3).
+ */
 export function EventInfo({ settings }: EventInfoProps) {
   return (
-    <section className="flex flex-col gap-3 rounded-lg bg-card-bg p-6">
-      <h1 className="text-2xl font-bold text-primary">{settings.welcome_title}</h1>
-      {settings.welcome_subtitle && (
-        <p className="text-text-muted">{settings.welcome_subtitle}</p>
-      )}
+    <section className="flex flex-col gap-4 p-6">
+      <h1 className="font-display text-3xl uppercase text-stencil-red sm:text-5xl">
+        Baby Shower
+      </h1>
+      {settings.welcome_subtitle && <p className="text-text">{settings.welcome_subtitle}</p>}
 
-      <dl className="flex flex-col gap-1 text-sm text-text">
+      <dl className="flex flex-col gap-2 rounded-2xl border-2 border-stencil-red px-6 py-4 text-sm text-text">
         {settings.event_date && (
           <div className="flex gap-2">
             <dt className="font-medium">Fecha:</dt>
@@ -38,15 +46,22 @@ export function EventInfo({ settings }: EventInfoProps) {
           href={settings.maps_url}
           target="_blank"
           rel="noopener noreferrer"
-          className="w-fit rounded bg-primary px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90"
+          className="w-fit rounded-lg bg-teal px-6 py-3 text-sm font-block uppercase text-cream transition-opacity hover:opacity-90"
         >
           Ver en Google Maps
         </a>
       )}
 
       {settings.cash_note && (
-        <p className="text-sm italic text-text-muted">{settings.cash_note}</p>
+        <p className="text-sm italic text-teal-dark">{settings.cash_note}</p>
       )}
+
+      <Link
+        href="/regalos"
+        className="w-fit rounded-lg bg-teal px-6 py-3 text-sm font-block uppercase text-cream transition-opacity hover:opacity-90"
+      >
+        Lista de regalos
+      </Link>
     </section>
   )
 }

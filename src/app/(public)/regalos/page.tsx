@@ -21,8 +21,8 @@ export default async function RegalosPage() {
   const safeGifts = (gifts ?? []) as unknown as GiftWithCategory[]
 
   return (
-    <main className="mx-auto flex max-w-4xl flex-col gap-8 p-6">
-      <Link href="/invitacion" className="text-sm text-primary underline">
+    <main className="mx-auto flex max-w-4xl flex-col gap-8 bg-cream p-6">
+      <Link href="/invitacion" className="text-sm text-teal-dark underline">
         ← Volver al inicio
       </Link>
 

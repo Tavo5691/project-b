@@ -18,7 +18,7 @@ export function GalleryImage({ src, alt }: GalleryImageProps) {
   const [currentSrc, onError] = useImageFallback(src, PLACEHOLDER_SRC)
 
   return (
-    <div className="relative aspect-square w-40 shrink-0 overflow-hidden rounded-lg bg-card-bg">
+    <div className="relative aspect-square w-40 shrink-0 overflow-hidden rounded-2xl bg-card-bg">
       <Image
         src={currentSrc}
         alt={alt}

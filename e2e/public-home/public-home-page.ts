@@ -9,7 +9,7 @@ export class PublicHomePage extends BasePage {
   constructor(page: Page) {
     super(page)
     this.galleryImages = page.getByRole('img').and(page.locator('[alt^="Foto "]'))
-    this.regalosLink = page.getByRole('link', { name: 'Ver lista de regalos' })
+    this.regalosLink = page.getByRole('link', { name: 'Lista de regalos' })
     this.cancelarLink = page.getByRole('link', {
       name: '¿Ya reservaste y necesitás cancelar?',
     })

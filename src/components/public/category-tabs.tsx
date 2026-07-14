@@ -36,10 +36,10 @@ export function CategoryTabs({ categories, gifts }: CategoryTabsProps) {
               aria-selected={isActive}
               onClick={() => setActiveCategoryId(category.id)}
               className={cn(
-                'shrink-0 whitespace-nowrap rounded-full border px-4 py-2 text-sm font-medium transition-colors',
+                'shrink-0 whitespace-nowrap rounded-full border-2 px-4 py-2 text-sm font-block uppercase transition-colors',
                 isActive
-                  ? 'border-primary bg-primary text-white'
-                  : 'border-border bg-white text-text-muted'
+                  ? 'border-teal bg-teal text-cream'
+                  : 'border-teal bg-white text-teal-dark'
               )}
             >
               {category.name}
@@ -49,7 +49,7 @@ export function CategoryTabs({ categories, gifts }: CategoryTabsProps) {
       </div>
 
       {allReserved ? (
-        <p className="rounded-lg bg-card-bg p-6 text-center text-sm text-text-muted">
+        <p className="rounded-2xl bg-white p-6 text-center text-sm text-teal-dark">
           {EMPTY_CATEGORY_MESSAGE}
         </p>
       ) : (

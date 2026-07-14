@@ -18,7 +18,7 @@ interface ReserveButtonProps {
 export function ReserveButton({ isReserved, onReserve }: ReserveButtonProps) {
   if (isReserved) {
     return (
-      <span className="inline-block w-fit rounded bg-border px-3 py-1 text-xs font-medium text-text-muted">
+      <span className="inline-block w-fit rounded-full bg-teal/15 px-3 py-1 text-xs font-medium text-teal-dark">
         Reservado
       </span>
     )
@@ -28,7 +28,7 @@ export function ReserveButton({ isReserved, onReserve }: ReserveButtonProps) {
     <button
       type="button"
       onClick={onReserve}
-      className="w-full rounded bg-primary px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90"
+      className="w-full rounded-lg bg-teal px-4 py-2 text-sm font-block uppercase text-cream transition-opacity hover:opacity-90"
     >
       Reservar
     </button>

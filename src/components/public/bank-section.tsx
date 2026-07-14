@@ -10,8 +10,8 @@ export function BankSection({ settings }: BankSectionProps) {
   if (!hasBankInfo) return null
 
   return (
-    <section className="flex flex-col gap-2 rounded-lg border border-border bg-card-bg p-6">
-      <h2 className="font-semibold text-text">Datos para transferencia</h2>
+    <section className="flex flex-col gap-2 rounded-2xl border border-teal/20 bg-white p-6">
+      <h2 className="font-block uppercase text-teal-dark">Datos para transferencia</h2>
       <dl className="flex flex-col gap-1 text-sm text-text">
         {settings.bank_name && (
           <div className="flex gap-2">

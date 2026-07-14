@@ -12,7 +12,7 @@ export default async function Home() {
   const safeSettings = settings as Settings | null
 
   return (
-    <main className="mx-auto flex max-w-4xl flex-col gap-8 p-6">
+    <main className="mx-auto flex max-w-4xl flex-col gap-8 bg-cream p-6">
       {safeSettings && <IntroSection settings={safeSettings} />}
       {safeSettings && <EventInfo settings={safeSettings} />}
       {/* `?? []` guards against the `gallery_urls` migration not being
@@ -21,15 +21,8 @@ export default async function Home() {
           for `categories`/`gifts` elsewhere in this codebase. */}
       {safeSettings && <PhotoGallery urls={safeSettings.gallery_urls ?? []} />}
 
-      <Link
-        href="/regalos"
-        className="w-fit rounded bg-primary px-6 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90"
-      >
-        Ver lista de regalos
-      </Link>
-
       <footer className="text-center">
-        <Link href="/cancelar" className="text-sm text-primary underline">
+        <Link href="/cancelar" className="text-sm text-teal-dark underline">
           ¿Ya reservaste y necesitás cancelar?
         </Link>
       </footer>
