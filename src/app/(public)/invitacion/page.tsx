@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { EventInfo } from '@/components/public/event-info'
+import { IntroSection } from '@/components/public/intro-section'
 import { PhotoGallery } from '@/components/public/photo-gallery'
 import type { Settings } from '@/types/database'
 
@@ -12,6 +13,7 @@ export default async function Home() {
 
   return (
     <main className="mx-auto flex max-w-4xl flex-col gap-8 p-6">
+      {safeSettings && <IntroSection settings={safeSettings} />}
       {safeSettings && <EventInfo settings={safeSettings} />}
       {/* `?? []` guards against the `gallery_urls` migration not being
           applied yet on a given environment's DB row (see migration

@@ -13,6 +13,7 @@ const DEFAULT_SETTINGS: Settings = {
   id: 1,
   welcome_title: '',
   welcome_subtitle: '',
+  intro_message: '',
   event_date: '',
   event_time: '',
   event_address: '',

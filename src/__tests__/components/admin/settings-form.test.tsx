@@ -13,6 +13,7 @@ const settings: Settings = {
   id: 1,
   welcome_title: 'Bienvenidos',
   welcome_subtitle: 'Los esperamos',
+  intro_message: 'Ya viene BabyB',
   event_date: '2026-08-01',
   event_time: '16:00',
   event_address: 'Calle Falsa 123',
