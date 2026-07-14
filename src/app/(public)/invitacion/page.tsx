@@ -14,8 +14,8 @@ export default async function Home() {
   return (
     <>
       {safeSettings && <IntroSection settings={safeSettings} />}
+      {safeSettings && <EventInfo settings={safeSettings} />}
       <main className="mx-auto flex max-w-4xl flex-col gap-8 bg-cream p-6">
-        {safeSettings && <EventInfo settings={safeSettings} />}
         {/* `?? []` guards against the `gallery_urls` migration not being
             applied yet on a given environment's DB row (see migration
             005_gift_price_and_gallery.sql) — same defensive-cast pattern used
