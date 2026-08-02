@@ -21,41 +21,44 @@ export function EventInfo({ settings }: EventInfoProps) {
           Baby Shower
         </h1>
 
-        <dl className="flex flex-col gap-2 rounded-2xl border-2 border-stencil-red px-6 py-4 text-sm text-text">
-          {settings.event_date && (
-            <div className="flex gap-2">
-              <dt className="font-medium">Fecha:</dt>
-              <dd>{settings.event_date}</dd>
-            </div>
-          )}
-          {settings.event_time && (
-            <div className="flex gap-2">
-              <dt className="font-medium">Hora:</dt>
-              <dd>{settings.event_time}</dd>
-            </div>
-          )}
-          {settings.event_address && (
-            <div className="flex gap-2">
-              <dt className="font-medium">Lugar:</dt>
-              <dd>{settings.event_address}</dd>
-            </div>
-          )}
+        {/* The bordered box wraps the field list *and* the maps CTA, but the
+            `<dl>` itself holds only real dt/dd pairs — a bare `<div>` inside a
+            definition list is invalid markup. */}
+        <div className="flex flex-col gap-2 rounded-2xl border-2 border-stencil-red px-6 py-4 text-sm text-text">
+          <dl className="flex flex-col gap-2">
+            {settings.event_date && (
+              <div className="flex gap-2">
+                <dt className="font-medium">Fecha:</dt>
+                <dd>{settings.event_date}</dd>
+              </div>
+            )}
+            {settings.event_time && (
+              <div className="flex gap-2">
+                <dt className="font-medium">Hora:</dt>
+                <dd>{settings.event_time}</dd>
+              </div>
+            )}
+            {settings.event_address && (
+              <div className="flex gap-2">
+                <dt className="font-medium">Lugar:</dt>
+                <dd>{settings.event_address}</dd>
+              </div>
+            )}
+          </dl>
+
           {settings.maps_url && (
-            <div className="flex gap-2">
-              <dt className="font-medium">Mapa:</dt>
-              <dd>
-                <a
-                  href={settings.maps_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block rounded-lg bg-teal px-6 py-3 text-sm font-block uppercase text-cream transition-opacity hover:opacity-90"
-                >
-                  Ver en Google Maps
-                </a>
-              </dd>
+            <div className="flex justify-center pt-1">
+              <a
+                href={settings.maps_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block rounded-lg bg-teal px-6 py-3 text-sm font-block uppercase text-cream transition-opacity hover:opacity-90"
+              >
+                Ver en Google Maps
+              </a>
             </div>
           )}
-        </dl>
+        </div>
 
         <div className="flex items-center gap-4">
           {settings.cash_note && (
