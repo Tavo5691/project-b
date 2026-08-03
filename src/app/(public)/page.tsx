@@ -25,7 +25,7 @@ export default async function SplashPage() {
         </div>
       </div>
 
-      <footer className="pb-8 text-lg font-bold uppercase text-stencil-red">
+      <footer className="pb-8 text-center font-block text-xs uppercase tracking-wide text-stencil-red">
         © 2026 Baby Chuchi Inc. Todos los mimos reservados.
       </footer>
     </section>

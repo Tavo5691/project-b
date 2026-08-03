@@ -53,7 +53,7 @@ export function CategoryTabs({ categories, gifts }: CategoryTabsProps) {
           {EMPTY_CATEGORY_MESSAGE}
         </p>
       ) : (
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
           {filteredGifts.map((gift) => (
             <GiftCard key={gift.id} gift={gift} onReserve={setReservingGift} />
           ))}

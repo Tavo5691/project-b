@@ -20,6 +20,13 @@ describe('CancelForm', () => {
     cancelReservationMock.mockReset()
   })
 
+  it('describes the expected code format through the input itself', () => {
+    render(<CancelForm />)
+    expect(screen.getByLabelText('Código de cancelación')).toHaveAccessibleDescription(
+      /PALABRA-0000/
+    )
+  })
+
   it('shows a success message with gift and holder names on success', async () => {
     cancelReservationMock.mockResolvedValueOnce({
       success: true,

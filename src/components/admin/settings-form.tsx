@@ -74,8 +74,13 @@ export function SettingsForm({ settings }: SettingsFormProps) {
       )}
 
       <div>
+        {/* The public site renders only the first URL (as the invitation's
+            intro photo) — the standalone photo gallery was removed with the
+            design port. The list is kept so the extra URLs survive and a
+            gallery can come back without a migration, but the label has to
+            be honest about what actually shows. */}
         <span className="mb-1 block text-sm font-medium text-text">
-          Fotos de la galería
+          Fotos — se muestra la primera
         </span>
         <div className="flex flex-col gap-2">
           {galleryUrls.map((url, index) => (

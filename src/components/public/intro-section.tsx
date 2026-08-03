@@ -6,19 +6,22 @@ interface IntroSectionProps {
 }
 
 /**
- * "Ya viene BabyB" intro section — a full-viewport blue section (matching
- * the splash page's `min-h-screen` treatment) with a two-column split
- * (photo + teal message card) inset inside it on wider screens, stacked on
- * mobile. Server Component: the photo has no `onError` fallback (that
- * requires a client boundary, see `gallery-image.tsx`) — it simply doesn't
- * render when there's no URL.
+ * "Ya viene BabyB" intro section — a full-bleed blue band with a two-column
+ * split (photo + teal message card) inset inside it on wider screens,
+ * stacked on mobile. Server Component: the photo has no `onError` fallback
+ * (that would require a client boundary) — it simply doesn't render when
+ * there's no URL.
+ *
+ * Only `gallery_urls[0]` is used. The rest of the array is stored but not
+ * displayed anywhere on the public site; see the note on the admin settings
+ * form's gallery field.
  */
 export function IntroSection({ settings }: IntroSectionProps) {
   const photoUrl = settings.gallery_urls?.[0]
 
   return (
-    <section className="flex min-h-screen w-full flex-col items-center justify-center bg-intro-blue px-6 py-16 sm:px-12">
-      <div className="grid w-full max-w-5xl grid-cols-1 gap-6 md:grid-cols-2">
+    <section className="w-full bg-intro-blue px-6 py-16 sm:px-12">
+      <div className="mx-auto grid w-full max-w-5xl grid-cols-1 gap-6 md:grid-cols-2">
         {photoUrl ? (
           <div className="relative aspect-square w-full overflow-hidden rounded-lg">
             <Image

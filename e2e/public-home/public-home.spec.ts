@@ -4,8 +4,8 @@ import { PublicHomePage } from './public-home-page'
 // Landing content now lives at `/invitacion` — `/` is a new splash gate
 // (see `e2e/splash/splash.spec.ts`). This content no longer fetches
 // gift/category data — that moved to `/regalos`. These specs only assert
-// invitation content: event info, gallery, and the CTA link, per the
-// landing/registry split.
+// invitation content: event info, the CTA link, and the section nav, per
+// the landing/registry split.
 test.describe('Public landing page', () => {
   test.use({ viewport: { width: 375, height: 812 } })
 
@@ -34,29 +34,28 @@ test.describe('Public landing page', () => {
   )
 
   test(
-    'the cancellation link is still available on the landing page',
+    'cancellation is still reachable from the landing page',
     { tag: ['@e2e', '@landing'] },
     async ({ page }) => {
       const homePage = new PublicHomePage(page)
       await homePage.goto()
 
-      await expect(homePage.cancelarLink).toBeVisible()
-      await homePage.cancelarLink.click()
+      await expect(homePage.navCancelarLink).toBeVisible()
+      await homePage.navCancelarLink.click()
       await expect(page).toHaveURL(/\/cancelar$/)
     }
   )
 
   test(
-    'gracefully renders the gallery section (empty if no gallery URLs)',
+    'the section nav links to the gift registry',
     { tag: ['@e2e', '@landing'] },
     async ({ page }) => {
       const homePage = new PublicHomePage(page)
       await homePage.goto()
 
-      // Assert gallery images locator either finds images or gracefully renders nothing
-      const galleryImages = homePage.galleryImages
-      const count = await galleryImages.count()
-      expect(count).toBeGreaterThanOrEqual(0)
+      await expect(homePage.navRegalosLink).toBeVisible()
+      await homePage.navRegalosLink.click()
+      await expect(page).toHaveURL(/\/regalos$/)
     }
   )
 })

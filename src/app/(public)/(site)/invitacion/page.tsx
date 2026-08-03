@@ -1,10 +1,8 @@
-import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { BabyChuchiLab } from '@/components/public/baby-chuchi-lab'
 import { ColoresSection } from '@/components/public/colores-section'
 import { EventInfo } from '@/components/public/event-info'
 import { IntroSection } from '@/components/public/intro-section'
-import { PhotoGallery } from '@/components/public/photo-gallery'
 import type { Settings } from '@/types/database'
 
 export default async function Home() {
@@ -19,19 +17,6 @@ export default async function Home() {
       {safeSettings && <EventInfo settings={safeSettings} />}
       <ColoresSection />
       <BabyChuchiLab />
-      <main className="mx-auto flex max-w-4xl flex-col gap-8 bg-cream p-6">
-        {/* `?? []` guards against the `gallery_urls` migration not being
-            applied yet on a given environment's DB row (see migration
-            005_gift_price_and_gallery.sql) — same defensive-cast pattern used
-            for `categories`/`gifts` elsewhere in this codebase. */}
-        {safeSettings && <PhotoGallery urls={safeSettings.gallery_urls ?? []} />}
-
-        <footer className="text-center">
-          <Link href="/cancelar" className="text-sm text-teal-dark underline">
-            ¿Ya reservaste y necesitás cancelar?
-          </Link>
-        </footer>
-      </main>
     </>
   )
 }
