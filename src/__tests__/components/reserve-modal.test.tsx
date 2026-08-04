@@ -9,8 +9,7 @@ vi.mock('@/actions/reserve', () => ({
 import { ReserveModal } from '@/components/public/reserve-modal'
 
 function fillAndSubmit() {
-  fireEvent.change(screen.getByLabelText('Nombre'), { target: { value: 'Ana' } })
-  fireEvent.change(screen.getByLabelText('Apellido'), { target: { value: 'Perez' } })
+  fireEvent.change(screen.getByLabelText('Nombre'), { target: { value: 'Ana Perez' } })
   fireEvent.click(screen.getByRole('button', { name: 'Confirmar reserva' }))
 }
 
@@ -57,9 +56,7 @@ describe('ReserveModal', () => {
     fillAndSubmit()
 
     await waitFor(() => {
-      expect(
-        screen.getByText('Completá tu nombre y apellido para reservar.')
-      ).toBeInTheDocument()
+      expect(screen.getByText('Completá tu nombre para reservar.')).toBeInTheDocument()
     })
     expect(screen.getByLabelText('Nombre')).toBeInTheDocument()
   })

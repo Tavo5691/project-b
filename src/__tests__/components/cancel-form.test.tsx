@@ -41,7 +41,7 @@ describe('CancelForm', () => {
     await waitFor(() => {
       expect(screen.getByRole('status')).toHaveTextContent('Coche')
     })
-    expect(screen.getByRole('status')).toHaveTextContent('Ana Perez')
+    expect(screen.getByRole('status')).toHaveTextContent('Ana')
   })
 
   it('shows the not-found message when the code does not match a reservation', async () => {

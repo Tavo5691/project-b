@@ -11,8 +11,7 @@ const MAX_ATTEMPTS = 2
 
 const reserveSchema = z.object({
   gift_id: z.string().min(1, { error: 'Falta el regalo a reservar' }),
-  first_name: z.string().min(1, { error: 'El nombre es obligatorio' }),
-  last_name: z.string().min(1, { error: 'El apellido es obligatorio' }),
+  name: z.string().min(1, { error: 'El nombre es obligatorio' }),
   message: z.string().optional(),
 })
 
@@ -32,8 +31,7 @@ export async function reserveGift(
 ): Promise<ReserveResult> {
   const parsed = reserveSchema.safeParse({
     gift_id: formData.get('gift_id'),
-    first_name: formData.get('first_name'),
-    last_name: formData.get('last_name'),
+    name: formData.get('name'),
     message: formData.get('message') || undefined,
   })
 
@@ -41,7 +39,7 @@ export async function reserveGift(
     return { success: false, error: 'invalid_input' }
   }
 
-  const { gift_id, first_name, last_name, message } = parsed.data
+  const { gift_id, name, message } = parsed.data
   const supabase = await createClient()
 
   let cancelToken = generateCancelCode()
@@ -49,8 +47,12 @@ export async function reserveGift(
   for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt += 1) {
     const { data, error } = await supabase.rpc('reserve_gift', {
       p_gift_id: gift_id,
-      p_first_name: first_name,
-      p_last_name: last_name,
+      // The `reservations` table still has a NOT NULL last_name column —
+      // the form was collapsed to a single name field, and dropping the
+      // column is a migration judged out of scope. Same posture as the
+      // unused `settings` columns.
+      p_first_name: name,
+      p_last_name: '',
       p_message: message ?? null,
       p_cancel_token: cancelToken,
     })

@@ -2,8 +2,7 @@ import { Page, Locator, expect } from '@playwright/test'
 import { BasePage } from '../base-page'
 
 export interface ReservationData {
-  firstName: string
-  lastName: string
+  name: string
 }
 
 export class RegalosPage extends BasePage {
@@ -22,8 +21,7 @@ export class RegalosPage extends BasePage {
 
   async reserveFirstAvailableGift(data: ReservationData): Promise<void> {
     await this.reserveButtons.first().click()
-    await this.page.getByLabel('Nombre').fill(data.firstName)
-    await this.page.getByLabel('Apellido').fill(data.lastName)
+    await this.page.getByLabel('Nombre').fill(data.name)
     await this.page.getByRole('button', { name: 'Confirmar reserva' }).click()
   }
 

@@ -40,7 +40,7 @@ describe('ReservationsPanel', () => {
   it('shows a table row with gift name, guest name, message, and date', () => {
     render(<ReservationsPanel reservations={reservations} />)
     expect(screen.getByText('Coche')).toBeInTheDocument()
-    expect(screen.getByText('Ana Perez')).toBeInTheDocument()
+    expect(screen.getByText('Ana')).toBeInTheDocument()
     expect(screen.getByText('Con mucho cariño')).toBeInTheDocument()
   })
 

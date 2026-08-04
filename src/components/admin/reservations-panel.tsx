@@ -55,9 +55,7 @@ export function ReservationsPanel({ reservations: initial }: ReservationsPanelPr
           {reservations.map((reservation) => (
             <tr key={reservation.id} className="border-b border-border align-top">
               <td className="py-2 pr-2 text-text">{reservation.gift.name}</td>
-              <td className="py-2 pr-2 text-text">
-                {reservation.first_name} {reservation.last_name}
-              </td>
+              <td className="py-2 pr-2 text-text">{reservation.first_name}</td>
               <td className="py-2 pr-2 text-text-muted">{reservation.message}</td>
               <td className="py-2 pr-2 text-text-muted">{formatDate(reservation.created_at)}</td>
               <td className="py-2 pr-2">

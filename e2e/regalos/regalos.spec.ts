@@ -17,7 +17,7 @@ test.describe('Gift registry (/regalos) — reserve flow', () => {
       await expect(regalosPage.categoryTabs).toBeVisible()
       await expect(regalosPage.reserveButtons.first()).toBeVisible()
 
-      await regalosPage.reserveFirstAvailableGift({ firstName: 'Ana', lastName: 'Perez' })
+      await regalosPage.reserveFirstAvailableGift({ name: 'Ana Perez' })
 
       const cancelCode = await regalosPage.verifyReservationSucceeded()
       expect(cancelCode).toMatch(/^[A-Z]+-\d{4}$/)

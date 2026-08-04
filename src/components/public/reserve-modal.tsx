@@ -29,7 +29,7 @@ export function ReserveModal({ giftId, giftName, onClose }: ReserveModalProps) {
   const inlineError =
     state && !state.success && state.error !== 'already_reserved'
       ? state.error === 'invalid_input'
-        ? 'Completá tu nombre y apellido para reservar.'
+        ? 'Completá tu nombre para reservar.'
         : 'Ocurrió un error al reservar. Intentá de nuevo.'
       : null
 
@@ -53,31 +53,12 @@ export function ReserveModal({ giftId, giftName, onClose }: ReserveModalProps) {
             </h2>
 
             <div>
-              <label
-                htmlFor="first_name"
-                className="mb-1 block text-sm font-medium text-teal-dark"
-              >
+              <label htmlFor="name" className="mb-1 block text-sm font-medium text-teal-dark">
                 Nombre
               </label>
               <input
-                id="first_name"
-                name="first_name"
-                type="text"
-                required
-                className="w-full rounded-lg border border-teal/30 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-teal"
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="last_name"
-                className="mb-1 block text-sm font-medium text-teal-dark"
-              >
-                Apellido
-              </label>
-              <input
-                id="last_name"
-                name="last_name"
+                id="name"
+                name="name"
                 type="text"
                 required
                 className="w-full rounded-lg border border-teal/30 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-teal"

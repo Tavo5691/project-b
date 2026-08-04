@@ -13,7 +13,7 @@ test.describe('Cancellation flow', () => {
       // regalos Page Object rather than duplicating the reserve flow.
       const regalosPage = new RegalosPage(page)
       await regalosPage.goto()
-      await regalosPage.reserveFirstAvailableGift({ firstName: 'Bruno', lastName: 'Diaz' })
+      await regalosPage.reserveFirstAvailableGift({ name: 'Bruno Diaz' })
       const cancelCode = await regalosPage.verifyReservationSucceeded()
       await regalosPage.closeModal()
 

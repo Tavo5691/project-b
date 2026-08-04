@@ -58,8 +58,8 @@ Reservas de invitados.
 |-------|------|-------------|
 | `id` | UUID | PK |
 | `gift_id` | UUID | FK → gifts |
-| `first_name` | text | Obligatorio |
-| `last_name` | text | Obligatorio |
+| `first_name` | text | Obligatorio — usado como nombre completo. El form solo pide un campo "Nombre". |
+| `last_name` | text | Obligatorio en la DB pero no expuesto en el form (siempre `''`); dead weight, ver `reserve.ts`. |
 | `message` | text | Opcional |
 | `cancel_token` | UUID | Token único para cancelar sin cuenta |
 | `created_at` | timestamp | |
@@ -71,7 +71,7 @@ Reservas de invitados.
 - Un regalo tiene dos estados: `available` o `reserved`.
 - Al reservar, el regalo no desaparece: se muestra en gris con badge "Reservado".
 - Los invitados no ven quién reservó un regalo; solo que está ocupado.
-- La reserva requiere nombre y apellido. El mensaje es opcional.
+- La reserva requiere nombre (un solo campo). El mensaje es opcional.
 - **Race condition:** La reserva se ejecuta con `UPDATE ... WHERE status = 'available'`. Si retorna 0 filas, otro invitado llegó primero → se notifica al usuario y el regalo ya aparece reservado.
 
 ---

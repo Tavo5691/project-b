@@ -21,15 +21,15 @@ describe('reserveGift', () => {
     vi.mocked(revalidatePath).mockClear()
   })
 
-  it('returns invalid_input when first_name is missing', async () => {
-    const fd = buildFormData({ gift_id: 'gift-1', last_name: 'Perez' })
+  it('returns invalid_input when name is missing', async () => {
+    const fd = buildFormData({ gift_id: 'gift-1' })
     const result = await reserveGift(null, fd)
     expect(result).toEqual({ success: false, error: 'invalid_input' })
     expect(rpcMock).not.toHaveBeenCalled()
   })
 
   it('returns invalid_input when gift_id is missing', async () => {
-    const fd = buildFormData({ first_name: 'Ana', last_name: 'Perez' })
+    const fd = buildFormData({ name: 'Ana Perez' })
     const result = await reserveGift(null, fd)
     expect(result).toEqual({ success: false, error: 'invalid_input' })
     expect(rpcMock).not.toHaveBeenCalled()
@@ -40,10 +40,23 @@ describe('reserveGift', () => {
       data: { success: true, cancel_token: 'ROSA-1234' },
       error: null,
     })
-    const fd = buildFormData({ gift_id: 'gift-1', first_name: 'Ana', last_name: 'Perez' })
+    const fd = buildFormData({ gift_id: 'gift-1', name: 'Ana Perez' })
     const result = await reserveGift(null, fd)
     expect(result).toEqual({ success: true, cancelToken: 'ROSA-1234' })
     expect(revalidatePath).toHaveBeenCalledWith('/')
+  })
+
+  it('sends the name as p_first_name and an empty p_last_name to the RPC', async () => {
+    rpcMock.mockResolvedValueOnce({
+      data: { success: true, cancel_token: 'ROSA-1234' },
+      error: null,
+    })
+    const fd = buildFormData({ gift_id: 'gift-1', name: 'Ana Perez' })
+    await reserveGift(null, fd)
+    expect(rpcMock).toHaveBeenCalledWith(
+      'reserve_gift',
+      expect.objectContaining({ p_first_name: 'Ana Perez', p_last_name: '' })
+    )
   })
 
   it('returns already_reserved when RPC reports failure', async () => {
@@ -51,7 +64,7 @@ describe('reserveGift', () => {
       data: { success: false, error: 'already_reserved' },
       error: null,
     })
-    const fd = buildFormData({ gift_id: 'gift-1', first_name: 'Ana', last_name: 'Perez' })
+    const fd = buildFormData({ gift_id: 'gift-1', name: 'Ana Perez' })
     const result = await reserveGift(null, fd)
     expect(result).toEqual({ success: false, error: 'already_reserved' })
     expect(revalidatePath).not.toHaveBeenCalled()
@@ -65,7 +78,7 @@ describe('reserveGift', () => {
         error: null,
       })
 
-    const fd = buildFormData({ gift_id: 'gift-1', first_name: 'Ana', last_name: 'Perez' })
+    const fd = buildFormData({ gift_id: 'gift-1', name: 'Ana Perez' })
     const result = await reserveGift(null, fd)
     expect(rpcMock).toHaveBeenCalledTimes(2)
     expect(result).toEqual({ success: true, cancelToken: 'LUNA-5678' })
@@ -76,7 +89,7 @@ describe('reserveGift', () => {
       .mockResolvedValueOnce({ data: null, error: { code: '23505', message: 'duplicate key' } })
       .mockResolvedValueOnce({ data: null, error: { code: '23505', message: 'duplicate key' } })
 
-    const fd = buildFormData({ gift_id: 'gift-1', first_name: 'Ana', last_name: 'Perez' })
+    const fd = buildFormData({ gift_id: 'gift-1', name: 'Ana Perez' })
     const result = await reserveGift(null, fd)
     expect(rpcMock).toHaveBeenCalledTimes(2)
     expect(result).toEqual({ success: false, error: 'db_error' })
@@ -84,7 +97,7 @@ describe('reserveGift', () => {
 
   it('returns db_error on non-unique RPC error without retrying', async () => {
     rpcMock.mockResolvedValueOnce({ data: null, error: { code: '500', message: 'oops' } })
-    const fd = buildFormData({ gift_id: 'gift-1', first_name: 'Ana', last_name: 'Perez' })
+    const fd = buildFormData({ gift_id: 'gift-1', name: 'Ana Perez' })
     const result = await reserveGift(null, fd)
     expect(result).toEqual({ success: false, error: 'db_error' })
     expect(rpcMock).toHaveBeenCalledTimes(1)

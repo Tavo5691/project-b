@@ -45,7 +45,7 @@ export function CancelForm() {
       {state?.success && (
         <p className="rounded-lg bg-white p-4 text-sm text-text" role="status">
           Cancelamos la reserva de <strong>{state.giftName}</strong> a nombre de{' '}
-          {state.firstName} {state.lastName}.
+          {state.firstName}.
         </p>
       )}
 
