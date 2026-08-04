@@ -7,7 +7,6 @@ import { verifyAdminSession } from '@/actions/admin-auth'
 
 const settingsSchema = z.object({
   welcome_title: z.string().min(1, { error: 'El título es obligatorio' }),
-  welcome_subtitle: z.string().optional(),
   intro_message_1: z.string().optional(),
   intro_message_2: z.string().optional(),
   event_date: z.string().optional(),
@@ -15,9 +14,6 @@ const settingsSchema = z.object({
   event_address: z.string().optional(),
   maps_url: z.string().optional(),
   cash_note: z.string().optional(),
-  bank_name: z.string().optional(),
-  bank_account: z.string().optional(),
-  bank_holder: z.string().optional(),
   gallery_urls: z.array(z.url({ error: 'URL inválida' })).default([]),
 })
 
@@ -37,7 +33,6 @@ export async function updateSettings(
 
   const parsed = settingsSchema.safeParse({
     welcome_title: formData.get('welcome_title'),
-    welcome_subtitle: formData.get('welcome_subtitle') ?? '',
     intro_message_1: formData.get('intro_message_1') ?? '',
     intro_message_2: formData.get('intro_message_2') ?? '',
     event_date: formData.get('event_date') ?? '',
@@ -45,9 +40,6 @@ export async function updateSettings(
     event_address: formData.get('event_address') ?? '',
     maps_url: formData.get('maps_url') ?? '',
     cash_note: formData.get('cash_note') ?? '',
-    bank_name: formData.get('bank_name') ?? '',
-    bank_account: formData.get('bank_account') ?? '',
-    bank_holder: formData.get('bank_holder') ?? '',
     gallery_urls: formData.getAll('gallery_url'),
   })
 

@@ -22,8 +22,15 @@ export function CancelForm() {
             type="text"
             required
             placeholder="ROSA-4821"
+            aria-describedby="cancel_token_hint"
             className="w-full rounded-lg border border-teal/30 bg-white px-3 py-2 text-sm uppercase outline-none focus:ring-2 focus:ring-teal"
           />
+          {/* Wired through `aria-describedby` rather than left as loose text:
+              the format is the difference between a successful lookup and a
+              silent "not found", so it has to reach screen readers too. */}
+          <p id="cancel_token_hint" className="mt-1 text-xs text-text-muted">
+            Es el código que recibiste al reservar, con formato PALABRA-0000.
+          </p>
         </div>
 
         <button

@@ -18,7 +18,6 @@ export type Category = {
 export type Settings = {
   id: 1
   welcome_title: string
-  welcome_subtitle: string
   intro_message_1: string
   intro_message_2: string
   event_date: string
@@ -26,9 +25,6 @@ export type Settings = {
   event_address: string
   maps_url: string
   cash_note: string
-  bank_name: string
-  bank_account: string
-  bank_holder: string
   gallery_urls: string[]
 }
 

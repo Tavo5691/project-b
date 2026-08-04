@@ -2,17 +2,18 @@ import { Page, Locator } from '@playwright/test'
 import { BasePage } from '../base-page'
 
 export class PublicHomePage extends BasePage {
-  readonly galleryImages: Locator
+  readonly navRegalosLink: Locator
+  readonly navCancelarLink: Locator
   readonly regalosLink: Locator
-  readonly cancelarLink: Locator
 
   constructor(page: Page) {
     super(page)
-    this.galleryImages = page.getByRole('img').and(page.locator('[alt^="Foto "]'))
+    const nav = page.getByRole('navigation', { name: 'Secciones' })
+    this.navRegalosLink = nav.getByRole('link', { name: 'Regalos' })
+    // The invitation's footer link to /cancelar was removed with the design
+    // port — the section nav is now the only route to cancellation.
+    this.navCancelarLink = nav.getByRole('link', { name: 'Cancelar' })
     this.regalosLink = page.getByRole('link', { name: 'Lista de regalos' })
-    this.cancelarLink = page.getByRole('link', {
-      name: '¿Ya reservaste y necesitás cancelar?',
-    })
   }
 
   async goto(): Promise<void> {
