@@ -54,18 +54,18 @@ export function LabFullScreen() {
           'md:gap-6'
         )}
       >
-        <h2 className="font-display text-3xl uppercase text-stencil-red sm:text-5xl">
+        <h2 className="font-display text-3xl uppercase text-stencil-red sm:text-5xl md:mt-10 md:text-center">
           Baby Chuchi Lab
         </h2>
-        <p className="border-l-4 border-teal pl-4 text-xs uppercase text-text-muted">
+        <p className="border-l-4 border-teal pl-4 text-xs uppercase text-text-muted md:mx-auto md:w-fit md:max-w-xl">
           Aunque compartimos carga genética, Benja tendrá una combinación genética única que nunca
           existió antes ni volverá a existir.
         </p>
 
-        <div className="text-center font-display text-sm uppercase tracking-wide text-stencil-red">
+        <div className="text-center font-display text-sm uppercase tracking-wide text-stencil-red md:text-lg">
           {week !== null && `${week} semanas`}
         </div>
-        <div className="relative h-9 overflow-visible rounded-full bg-stencil-red">
+        <div className="relative h-9 overflow-visible rounded-full bg-stencil-red md:mx-auto md:h-5 md:w-2/3">
           <div
             data-testid="progress-fill"
             className="absolute inset-y-0 left-0 rounded-l-full bg-[#d99a2b]"
@@ -73,7 +73,7 @@ export function LabFullScreen() {
           />
           <span
             aria-hidden="true"
-            className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 text-lg leading-none"
+            className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 text-lg leading-none md:text-sm"
             style={{ left: `${progress}%` }}
           >
             👣
@@ -87,13 +87,13 @@ export function LabFullScreen() {
           className={cn(
             'flex flex-col gap-1.5',
             FULL_SCREEN_FILL,
-            'md:justify-center md:gap-3 md:overflow-y-auto'
+            'md:mx-auto md:w-2/3 md:flex-row md:flex-wrap md:content-start md:justify-start md:gap-3 md:overflow-y-auto'
           )}
         >
           {visibleFacts.map((fact) => (
             <div
               key={fact.week}
-              className="flex shrink-0 items-center gap-2 rounded-[10px] border border-teal/20 bg-white px-3 py-2 md:px-4 md:py-3"
+              className="flex shrink-0 items-center gap-2 rounded-[10px] border border-teal/20 bg-white px-3 py-2 md:w-fit md:px-4 md:py-3"
             >
               <span aria-hidden="true" className="text-sm text-teal">
                 {fact.icon}

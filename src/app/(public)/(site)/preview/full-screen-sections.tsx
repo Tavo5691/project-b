@@ -28,64 +28,70 @@ export function EventInfoFullScreen({ settings }: { settings: Settings }) {
           'md:justify-between md:gap-6'
         )}
       >
-        <h1 className="font-display text-3xl uppercase text-stencil-red sm:text-5xl">
+        <h1 className="font-display text-3xl uppercase text-stencil-red sm:text-5xl md:mt-10 md:text-center">
           Baby Shower
         </h1>
 
-        {/* Deliberately NOT stretched to fill the leftover height: a bordered
-            box blown up to ~600px around four short lines reads as an empty
-            frame. The column spreads its three blocks across the screen
-            instead, so the section is covered without inflating any one box. */}
-        <div className="flex flex-col justify-center gap-3 rounded-2xl border-2 border-stencil-red px-6 py-5 text-center text-sm text-text md:gap-6 md:py-8 md:text-base">
-          <dl className="flex flex-col gap-2 md:gap-4">
-            {settings.event_address && (
-              <div className="flex justify-center gap-2">
-                <dt className="font-medium">Lugar:</dt>
-                <dd>{settings.event_address}</dd>
-              </div>
-            )}
-            {settings.event_date && (
-              <div className="flex justify-center gap-2">
-                <dt className="font-medium">Fecha:</dt>
-                <dd>{settings.event_date}</dd>
-              </div>
-            )}
-            {settings.event_time && (
-              <div className="flex justify-center gap-2">
-                <dt className="font-medium">Hora:</dt>
-                <dd>{settings.event_time}</dd>
-              </div>
-            )}
-          </dl>
+        <div aria-hidden="true" className="hidden md:block md:min-h-0 md:flex-[1]" />
 
-          {settings.maps_url && (
-            <div className="flex justify-center">
-              <a
-                href={settings.maps_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block rounded-lg bg-teal px-6 py-3 text-sm font-block uppercase text-cream transition-opacity hover:opacity-90"
-              >
-                Ver en Google Maps
-              </a>
-            </div>
-          )}
+        <div className="flex flex-col gap-4 md:gap-3">
+          {/* Deliberately NOT stretched to fill the leftover height: a bordered
+              box blown up to ~600px around four short lines reads as an empty
+              frame. The column spreads its three blocks across the screen
+              instead, so the section is covered without inflating any one box. */}
+          <div className="flex flex-col justify-center gap-3 rounded-2xl border-2 border-stencil-red px-6 py-5 text-center text-sm text-text md:gap-6 md:py-8 md:text-base">
+            <dl className="flex flex-col gap-2 md:gap-4">
+              {settings.event_address && (
+                <div className="flex justify-center gap-2">
+                  <dt className="font-medium">Lugar:</dt>
+                  <dd>{settings.event_address}</dd>
+                </div>
+              )}
+              {settings.event_date && (
+                <div className="flex justify-center gap-2">
+                  <dt className="font-medium">Fecha:</dt>
+                  <dd>{settings.event_date}</dd>
+                </div>
+              )}
+              {settings.event_time && (
+                <div className="flex justify-center gap-2">
+                  <dt className="font-medium">Hora:</dt>
+                  <dd>{settings.event_time}</dd>
+                </div>
+              )}
+            </dl>
+
+            {settings.maps_url && (
+              <div className="flex justify-center">
+                <a
+                  href={settings.maps_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block rounded-lg bg-teal px-6 py-3 text-sm font-block uppercase text-cream transition-opacity hover:opacity-90"
+                >
+                  Ver en Google Maps
+                </a>
+              </div>
+            )}
+          </div>
+
+          <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+            {settings.cash_note && (
+              <p className="flex-1 border-l-4 border-teal pl-4 text-xs uppercase text-stencil-red md:text-sm">
+                {settings.cash_note}
+              </p>
+            )}
+
+            <Link
+              href="/regalos"
+              className="w-fit shrink-0 rounded-lg bg-teal px-6 py-3 text-sm font-block uppercase text-cream transition-opacity hover:opacity-90 md:text-base"
+            >
+              Lista de regalos
+            </Link>
+          </div>
         </div>
 
-        <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-          {settings.cash_note && (
-            <p className="flex-1 border-l-4 border-teal pl-4 text-xs uppercase text-stencil-red">
-              {settings.cash_note}
-            </p>
-          )}
-
-          <Link
-            href="/regalos"
-            className="w-fit shrink-0 rounded-lg bg-teal px-6 py-3 text-sm font-block uppercase text-cream transition-opacity hover:opacity-90"
-          >
-            Lista de regalos
-          </Link>
-        </div>
+        <div aria-hidden="true" className="hidden md:block md:min-h-0 md:flex-[4]" />
       </div>
     </section>
   )
@@ -116,13 +122,19 @@ export function ColoresFullScreen() {
           'md:gap-6'
         )}
       >
-        <h2 className="font-display text-3xl uppercase text-teal-dark sm:text-5xl">Colores</h2>
+        <h2 className="font-display text-3xl uppercase text-teal-dark sm:text-5xl md:mt-10 md:text-center">
+          Colores
+        </h2>
 
-        <div className="rounded-2xl bg-cream px-5 py-4">
-          <p className="border-l-4 border-teal pl-4 text-xs uppercase text-stencil-red">
-            Colores de preferencia de los papis por si le quieres regalar alguna ropita (mentira, es
-            preferencia de la mami — el papi no tiene ni idea).
-          </p>
+        <div
+          className={cn(FULL_SCREEN_FILL, 'md:flex md:items-center md:justify-center')}
+        >
+          <div className="rounded-2xl bg-cream px-5 py-4">
+            <p className="border-l-4 border-teal pl-4 text-xs uppercase text-stencil-red md:text-sm">
+              Colores de preferencia de los papis por si le quieres regalar alguna ropita (mentira, es
+              preferencia de la mami — el papi no tiene ni idea).
+            </p>
+          </div>
         </div>
 
         {/* Still one wrapping row of swatches, exactly as in production — not
@@ -134,7 +146,7 @@ export function ColoresFullScreen() {
           className={cn(
             'flex flex-wrap items-center gap-3 pt-1',
             FULL_SCREEN_FILL,
-            'md:flex-nowrap md:gap-6 md:pt-0'
+            'md:flex-nowrap md:items-start md:gap-6 md:pt-0'
           )}
         >
           {COLOR_SWATCHES.map((hex) => (
