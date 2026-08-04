@@ -8,8 +8,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Lista de Regalos",
-  description: "Lista de regalos del baby shower",
+  title: "Invitación Benja",
+  description: "Baby Shower",
 };
 
 export default function RootLayout({
