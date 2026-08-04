@@ -39,6 +39,7 @@ describe('ReserveModal', () => {
     const downloadLink = screen.getByRole('link', { name: /descargar receta/i })
     expect(downloadLink).toHaveAttribute('href', '/Receta%20Benja.pdf')
     expect(downloadLink).toHaveAttribute('download')
+    expect(screen.getByText('Además, tenemos un regalo para vos:')).toBeInTheDocument()
   })
 
   it('transitions to the race-error state when the gift was already reserved', async () => {

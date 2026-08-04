@@ -1,7 +1,6 @@
 'use client'
 
 import { useActionState, useState } from 'react'
-import Link from 'next/link'
 import { reserveGift, type ReserveResult } from '@/actions/reserve'
 
 interface ReserveModalProps {
@@ -118,6 +117,10 @@ export function ReserveModal({ giftId, giftName, onClose }: ReserveModalProps) {
             >
               {copied ? 'Copiado ✓' : 'Copiar código'}
             </button>
+
+            <hr className="w-full border-t border-teal-dark/20" />
+
+            <p className="text-sm text-teal-dark">Además, tenemos un regalo para vos:</p>
             <a
               href="/Receta%20Benja.pdf"
               download
@@ -125,9 +128,6 @@ export function ReserveModal({ giftId, giftName, onClose }: ReserveModalProps) {
             >
               Descargar receta
             </a>
-            <Link href="/cancelar" className="text-sm text-teal-dark underline">
-              ¿Necesitás cancelar? Andá a /cancelar
-            </Link>
             <button
               type="button"
               onClick={onClose}
