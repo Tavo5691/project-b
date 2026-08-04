@@ -118,6 +118,13 @@ export function ReserveModal({ giftId, giftName, onClose }: ReserveModalProps) {
             >
               {copied ? 'Copiado ✓' : 'Copiar código'}
             </button>
+            <a
+              href="/Receta%20Benja.pdf"
+              download
+              className="rounded-lg bg-teal px-4 py-2 text-sm font-block uppercase text-cream transition-opacity hover:opacity-90"
+            >
+              Descargar receta
+            </a>
             <Link href="/cancelar" className="text-sm text-teal-dark underline">
               ¿Necesitás cancelar? Andá a /cancelar
             </Link>
