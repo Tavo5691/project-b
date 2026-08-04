@@ -52,7 +52,7 @@ describe('CategoryTabs', () => {
     ).toBeInTheDocument()
   })
 
-  it('shows the empty-category message when every gift in the tab is already reserved', () => {
+  it('shows the empty-category message alongside the still-visible reserved gifts', () => {
     const allReservedGifts: GiftWithCategory[] = [
       makeGift({ id: 'g1', category_id: 'cat-1', name: 'Olla', status: 'reserved' }),
       makeGift({ id: 'g2', category_id: 'cat-2', name: 'Chupete', status: 'available' }),
@@ -61,7 +61,24 @@ describe('CategoryTabs', () => {
     expect(
       screen.getByText(/Todos los regalos de esta categoría ya están reservados/)
     ).toBeInTheDocument()
-    expect(screen.queryByText('Olla')).not.toBeInTheDocument()
+    expect(screen.getByText('Olla')).toBeInTheDocument()
+  })
+
+  it('keeps the product link visible for a reserved gift in a fully-reserved category', () => {
+    const allReservedGifts: GiftWithCategory[] = [
+      makeGift({
+        id: 'g1',
+        category_id: 'cat-1',
+        name: 'Olla',
+        status: 'reserved',
+        external_link: 'https://example.com/olla',
+      }),
+    ]
+    render(<CategoryTabs categories={categories} gifts={allReservedGifts} />)
+    expect(screen.getByRole('link', { name: 'Ver producto' })).toHaveAttribute(
+      'href',
+      'https://example.com/olla'
+    )
   })
 
   it('shows a mixed category normally, with reserved gifts still visible', () => {

@@ -48,17 +48,17 @@ export function CategoryTabs({ categories, gifts }: CategoryTabsProps) {
         })}
       </div>
 
-      {allReserved ? (
+      {allReserved && (
         <p className="rounded-2xl bg-white p-6 text-center text-sm text-teal-dark">
           {EMPTY_CATEGORY_MESSAGE}
         </p>
-      ) : (
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-          {filteredGifts.map((gift) => (
-            <GiftCard key={gift.id} gift={gift} onReserve={setReservingGift} />
-          ))}
-        </div>
       )}
+
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+        {filteredGifts.map((gift) => (
+          <GiftCard key={gift.id} gift={gift} onReserve={setReservingGift} />
+        ))}
+      </div>
 
       {reservingGift && (
         <ReserveModal
