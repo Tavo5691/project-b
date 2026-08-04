@@ -12,7 +12,6 @@ import type {
 const DEFAULT_SETTINGS: Settings = {
   id: 1,
   welcome_title: '',
-  welcome_subtitle: '',
   intro_message_1: '',
   intro_message_2: '',
   event_date: '',

@@ -23,7 +23,6 @@ function buildFormData(fields: Record<string, string>, galleryUrls: string[] = [
 
 const VALID_FIELDS = {
   welcome_title: 'Bienvenidos a la fiesta',
-  welcome_subtitle: 'Nos vemos pronto',
   intro_message_1: 'Ya viene BabyB',
   intro_message_2: 'No se lo pierdan',
   event_date: '2026-08-01',

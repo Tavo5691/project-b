@@ -7,7 +7,6 @@ import { verifyAdminSession } from '@/actions/admin-auth'
 
 const settingsSchema = z.object({
   welcome_title: z.string().min(1, { error: 'El título es obligatorio' }),
-  welcome_subtitle: z.string().optional(),
   intro_message_1: z.string().optional(),
   intro_message_2: z.string().optional(),
   event_date: z.string().optional(),
@@ -34,7 +33,6 @@ export async function updateSettings(
 
   const parsed = settingsSchema.safeParse({
     welcome_title: formData.get('welcome_title'),
-    welcome_subtitle: formData.get('welcome_subtitle') ?? '',
     intro_message_1: formData.get('intro_message_1') ?? '',
     intro_message_2: formData.get('intro_message_2') ?? '',
     event_date: formData.get('event_date') ?? '',

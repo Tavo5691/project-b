@@ -12,7 +12,6 @@ import type { Settings } from '@/types/database'
 const settings: Settings = {
   id: 1,
   welcome_title: 'Bienvenidos',
-  welcome_subtitle: 'Los esperamos',
   intro_message_1: 'Ya viene BabyB',
   intro_message_2: 'No se lo pierdan',
   event_date: '2026-08-01',
