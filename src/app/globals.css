@@ -35,10 +35,19 @@ body {
   font-family: var(--font-block), sans-serif;
 }
 
-/* Category tabs — horizontal scroll, no visible scrollbar */
+/* Category tabs — centered when they fit, horizontal scroll when they don't,
+   no visible scrollbar.
+
+   `safe center` rather than plain `center`: in a scroll container, centering
+   overflowing content pushes the first items into overflow that cannot be
+   scrolled back to. The `safe` keyword falls back to `flex-start` exactly
+   when that would happen, so narrow screens keep every tab reachable.
+   Browsers without `safe` support drop the declaration and fall back to
+   `flex-start`, which is the old behaviour. */
 .category-tabs {
   display: flex;
   gap: 10px;
+  justify-content: safe center;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
