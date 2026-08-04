@@ -17,9 +17,6 @@ const FIELDS: { name: keyof Omit<Settings, 'id'>; label: string; multiline?: boo
   { name: 'event_address', label: 'Dirección' },
   { name: 'maps_url', label: 'Link de Google Maps' },
   { name: 'cash_note', label: 'Nota sobre efectivo', multiline: true },
-  { name: 'bank_name', label: 'Banco' },
-  { name: 'bank_account', label: 'Cuenta / Alias' },
-  { name: 'bank_holder', label: 'Titular de la cuenta' },
 ]
 
 export function SettingsForm({ settings }: SettingsFormProps) {

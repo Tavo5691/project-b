@@ -28,9 +28,6 @@ const settings: Settings = {
   event_address: '',
   maps_url: '',
   cash_note: '',
-  bank_name: '',
-  bank_account: '',
-  bank_holder: '',
   gallery_urls: [],
 }
 

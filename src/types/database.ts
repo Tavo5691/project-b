@@ -26,9 +26,6 @@ export type Settings = {
   event_address: string
   maps_url: string
   cash_note: string
-  bank_name: string
-  bank_account: string
-  bank_holder: string
   gallery_urls: string[]
 }
 

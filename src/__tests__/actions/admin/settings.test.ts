@@ -31,9 +31,6 @@ const VALID_FIELDS = {
   event_address: 'Calle Falsa 123',
   maps_url: 'https://maps.google.com/x',
   cash_note: 'También aceptamos efectivo',
-  bank_name: 'Banco Test',
-  bank_account: 'alias.test',
-  bank_holder: 'Ana Perez',
 }
 
 describe('updateSettings', () => {

@@ -20,9 +20,6 @@ const settings: Settings = {
   event_address: 'Calle Falsa 123',
   maps_url: 'https://maps.google.com/x',
   cash_note: 'Aceptamos efectivo',
-  bank_name: 'Banco Test',
-  bank_account: 'alias.test',
-  bank_holder: 'Ana Perez',
   gallery_urls: [],
 }
 
@@ -34,7 +31,10 @@ describe('SettingsForm', () => {
   it('pre-populates fields from the current settings row', () => {
     render(<SettingsForm settings={settings} />)
     expect(screen.getByLabelText('Título de bienvenida')).toHaveValue('Bienvenidos')
-    expect(screen.getByLabelText('Banco')).toHaveValue('Banco Test')
+    // Second field asserted so this covers the loop over FIELDS, not just its
+    // first entry. Was 'Banco' until the bank details were removed from the
+    // public site and this form.
+    expect(screen.getByLabelText('Dirección')).toHaveValue('Calle Falsa 123')
   })
 
   it('pre-populates the gallery URL list from settings.gallery_urls', () => {
